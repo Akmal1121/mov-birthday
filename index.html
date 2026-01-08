@@ -2,17 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Amov ❤️</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
 
-        /* FIX 1: Apply Scroll Snap directly to HTML, not a div */
+        /* 1. RESET: Allow the page to scroll naturally */
         html {
-            scroll-snap-type: y mandatory;
+            scroll-snap-type: y mandatory; /* The snapping magic */
             scroll-behavior: smooth;
-            height: 100%;
         }
 
         body {
@@ -21,17 +20,16 @@
             font-family: 'Montserrat', sans-serif;
             background-color: #121212;
             color: white;
-            overflow-x: hidden; /* Critical for mobile to prevent side-wobble */
-            width: 100%;
+            overflow-x: hidden; /* Stops side-scrolling wobble */
+            /* IMPORTANT: We removed 'height: 100%' here to let the page grow naturally */
         }
 
-        /* FIX 2: Use 'dvh' (Dynamic Height) for mobile browsers */
+        /* 2. SECTIONS: Force them to be full screen */
         section {
             height: 100vh; /* Fallback */
-            height: 100dvh; /* Mobile fix for address bars */
-            width: 100%;
-            scroll-snap-align: start;
-            scroll-snap-stop: always; /* Forces phone to stop at each card */
+            height: 100dvh; /* Mobile fix */
+            width: 100vw;   /* Full width */
+            scroll-snap-align: start; /* Snap point */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -39,11 +37,12 @@
             text-align: center;
             position: relative;
             
+            /* Background Animation */
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
         }
 
-        /* --- ANIMATIONS --- */
+        /* --- ANIMATIONS DEFINITIONS --- */
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -70,8 +69,8 @@
         .gaming { background: linear-gradient(-45deg, #e91e63, #121212, #5c0e28); }
         .video-section { background: linear-gradient(-45deg, #2196f3, #121212, #0d3c61); }
 
-        h1 { font-size: 2.2rem; margin: 0; text-transform: uppercase; letter-spacing: -1px; z-index: 10; position: relative; padding: 0 10px; }
-        p { font-size: 1.1rem; margin-top: 15px; opacity: 0.9; font-weight: 300; z-index: 10; max-width: 85%; position: relative; line-height: 1.4; }
+        h1 { font-size: 2.5rem; margin: 0; text-transform: uppercase; letter-spacing: -1px; z-index: 10; position: relative; padding: 0 15px; }
+        p { font-size: 1.2rem; margin-top: 15px; opacity: 0.9; font-weight: 300; z-index: 10; max-width: 90%; position: relative; line-height: 1.5; }
 
         .floating-element {
             position: absolute;
@@ -90,7 +89,7 @@
         }
 
         .stat-circle {
-            width: 160px; height: 160px; border-radius: 50%;
+            width: 180px; height: 180px; border-radius: 50%;
             background: rgba(255,255,255,0.1); backdrop-filter: blur(5px);
             display: flex; justify-content: center; align-items: center;
             font-size: 2.5rem; margin: 20px 0; border: 3px solid white;
@@ -147,12 +146,12 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // FIX 3: Mobile Optimization Settings
+        // 3. CONFIG: Relaxed settings for mobile stability
         AOS.init({
-            duration: 800, 
-            mirror: true,
-            offset: -50,   // Negative offset means "start animation BEFORE it's perfectly in center"
-            once: false,
+            duration: 800,
+            offset: 0, // Triggers immediately when element touches bottom of screen
+            once: false, // Allows re-animation
+            mirror: true, // Animates out when scrolling past
         });
     </script>
 </body>
