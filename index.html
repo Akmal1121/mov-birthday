@@ -8,41 +8,44 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
 
-        /* FIX: Apply scrolling to the whole page, not just a container */
-        html {
+        /* RESET & SCROLL SETUP */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #121212;
+            color: white;
+            overflow-x: hidden; /* No side scrolling */
+        }
+
+        /* The Scroll Container */
+        .main-wrapper {
+            height: 100vh;
+            overflow-y: scroll;
             scroll-snap-type: y mandatory;
             scroll-behavior: smooth;
         }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Montserrat', sans-serif;
-            background-color: #121212;
-            color: white;
-            overflow-x: hidden; /* Prevents horizontal scrolling */
-        }
-
         /* General Card Section Styling */
         section {
-            height: 100vh; /* Takes up full screen height */
+            height: 100vh; /* Full screen height */
             width: 100%;
-            scroll-snap-align: start; /* Snaps to this section */
+            scroll-snap-align: start; /* Snap point */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             position: relative;
-            overflow: hidden;
             
-            /* Animated Gradient Background Base */
+            /* Background Animation */
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
         }
 
         /* --- ANIMATIONS DEFINITIONS --- */
-
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -51,8 +54,7 @@
 
         @keyframes floatAround {
             0% { transform: translate(0, 0) rotate(0deg); opacity: 0.4; }
-            33% { transform: translate(30px, -50px) rotate(10deg); opacity: 0.8; }
-            66% { transform: translate(-20px, 40px) rotate(-10deg); opacity: 0.4; }
+            50% { transform: translate(20px, -20px) rotate(10deg); opacity: 0.8; }
             100% { transform: translate(0, 0) rotate(0deg); opacity: 0.4; }
         }
 
@@ -62,135 +64,109 @@
         }
 
         /* Typewriter Effect */
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: white; }
-        }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: white; } }
 
-        /* --- SPECIFIC CLASSES --- */
-
-        /* Background Colors */
+        /* --- STYLES --- */
         .intro { background: linear-gradient(-45deg, #1DB954, #121212, #0d3b1e); }
         .distance { background: linear-gradient(-45deg, #8d67ab, #121212, #3b1d52); }
         .gaming { background: linear-gradient(-45deg, #e91e63, #121212, #5c0e28); }
         .video-section { background: linear-gradient(-45deg, #2196f3, #121212, #0d3c61); }
 
-        h1 { font-size: 3rem; margin: 0; text-transform: uppercase; letter-spacing: -2px; z-index: 2; position: relative; }
-        p { font-size: 1.5rem; margin-top: 15px; opacity: 0.9; font-weight: 300; z-index: 2; max-width: 80%; position: relative; }
+        h1 { font-size: 2.5rem; margin: 0; text-transform: uppercase; letter-spacing: -2px; z-index: 10; position: relative; padding: 0 20px; }
+        p { font-size: 1.2rem; margin-top: 15px; opacity: 0.9; font-weight: 300; z-index: 10; max-width: 80%; position: relative; }
 
         /* Floating Element Class */
         .floating-element {
             position: absolute;
-            font-size: 4rem;
+            font-size: 3rem;
             pointer-events: none;
-            animation: floatAround 8s ease-in-out infinite;
+            animation: floatAround 6s ease-in-out infinite;
             z-index: 1;
         }
 
         /* Glowing Text Class */
-        .glow-text {
-            animation: glow 2s ease-in-out infinite alternate;
-        }
+        .glow-text { animation: glow 2s ease-in-out infinite alternate; }
 
-        /* Typewriter Text Wrapper */
-        .typewriter-container {
-            display: inline-block;
-        }
-        
+        .typewriter-container { display: inline-block; }
         .typewriter {
-            overflow: hidden; 
-            border-right: .15em solid white; 
-            white-space: nowrap; 
-            margin: 0 auto; 
-            letter-spacing: .15em; 
-            animation: 
-                typing 3.5s steps(40, end),
-                blink-caret .75s step-end infinite;
+            overflow: hidden; border-right: .15em solid white; white-space: nowrap; margin: 0 auto; 
+            letter-spacing: .15em; animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
         }
 
         .stat-circle {
-            width: 220px;
-            height: 220px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 3rem;
-            margin: 20px 0;
-            border: 3px solid white;
-            z-index: 2;
-            position: relative;
+            width: 180px; height: 180px; border-radius: 50%;
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(5px);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 2.5rem; margin: 20px 0; border: 3px solid white;
+            z-index: 10; position: relative;
         }
 
         .video-container {
-            width: 90%;
-            max-width: 560px;
-            margin-top: 20px;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            z-index: 2;
-            position: relative;
+            width: 90%; max-width: 560px; margin-top: 20px; border-radius: 15px;
+            overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            z-index: 10; position: relative;
         }
         iframe { width: 100%; aspect-ratio: 16/9; border: none; }
-
     </style>
 </head>
 <body>
 
-    <section class="intro">
-        <div class="floating-element" style="top: 10%; left: 10%;">❤️</div>
-        <div class="floating-element" style="bottom: 20%; right: 15%; animation-delay: 2s;">🎂</div>
+    <div class="main-wrapper">
         
-        <h1 data-aos="fade-down">Hi Amov</h1>
-        <div class="typewriter-container">
-            <p class="typewriter">Your 2025 Wrapped is here.</p>
-        </div>
-    </section>
+        <section class="intro">
+            <div class="floating-element" style="top: 10%; left: 10%;">❤️</div>
+            <div class="floating-element" style="bottom: 20%; right: 15%;">🎂</div>
+            
+            <h1 data-aos="fade-down">Hi Amov</h1>
+            <div class="typewriter-container">
+                <p class="typewriter">Your 2025 Wrapped is here.</p>
+            </div>
+        </section>
 
-    <section class="distance">
-        <div class="floating-element" style="top: 15%; right: 20%;">✈️</div>
-        <div class="floating-element" style="bottom: 10%; left: 10%; animation-delay: 1s;">🌏</div>
+        <section class="distance">
+            <div class="floating-element" style="top: 15%; right: 20%;">✈️</div>
+            
+            <p data-aos="zoom-in">We crossed</p>
+            <div class="stat-circle glow-text" data-aos="flip-left">6,000</div>
+            <h1 data-aos="fade-up">Kilometers</h1>
+            <p data-aos="fade-up">Just to be close to you.</p>
+        </section>
 
-        <p data-aos="zoom-in">We crossed</p>
-        <div class="stat-circle glow-text" data-aos="flip-left" data-aos-delay="300">6,000</div>
-        <h1 data-aos="fade-up">Kilometers</h1>
-        <p data-aos="fade-up" data-aos-delay="500">Just to be close to you.</p>
-    </section>
+        <section class="gaming">
+            <div class="floating-element" style="top: 10%; left: 50%;">🌲</div>
+            
+            <h1 data-aos="fade-right">Our Top Game</h1>
+            <div class="stat-circle" data-aos="zoom-in" style="font-size: 4rem;">🎮</div>
+            <p class="glow-text" data-aos="fade-left" style="font-size: 1.5rem; font-weight: bold;">Sons of the Forest</p>
+            <p data-aos="fade-up">(Best survival duo)</p>
+        </section>
 
-    <section class="gaming">
-        <div class="floating-element" style="top: 10%; left: 50%;">🌲</div> 
-        <div class="floating-element" style="bottom: 15%; right: 10%; font-size: 3rem; animation-delay: 3s;">🧟</div> 
+        <section class="video-section">
+            <div class="floating-element" style="top: 5%; left: 5%;">🐱</div>
+            
+            <h1 data-aos="zoom-out" class="glow-text">Special Message</h1>
+            <div class="video-container" data-aos="fade-up">
+                <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen></iframe>
+            </div>
+            <p data-aos="fade-up">Happy Birthday! 🎈</p>
+        </section>
 
-        <h1 data-aos="fade-right">Our Top Game</h1>
-        <div class="stat-circle" data-aos="zoom-in" data-aos-delay="400" style="font-size: 4rem;">🎮</div>
-        <p class="glow-text" data-aos="fade-left" style="font-size: 2rem; font-weight: bold;">Sons of the Forest</p>
-        <p data-aos="fade-up" data-aos-delay="600">(Best survival duo)</p>
-    </section>
-
-    <section class="video-section">
-        <div class="floating-element" style="top: 5%; left: 5%;">🐱</div> 
-        <div class="floating-element" style="top: 10%; right: 10%; animation-delay: 4s;">❤️</div>
-
-        <h1 data-aos="zoom-out" class="glow-text">Special Message</h1>
-        <div class="video-container" data-aos="fade-up" data-aos-delay="500">
-            <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen></iframe>
-        </div>
-        <p data-aos="fade-up" data-aos-delay="800">Happy Birthday! 🎈</p>
-    </section>
+    </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        // THIS IS THE FIX:
+        // By setting 'scroll-container' to our wrapper, AOS knows where to look for scrolling.
         AOS.init({
-            duration: 1200, // Slightly slower for better effect
-            once: false,    // Allows animations to happen again if she scrolls back up
+            duration: 1000, 
+            mirror: true,       // Allows animation to happen again if you scroll up
+            offset: 0,          // Triggers animation IMMEDIATELY when element touches screen
+            anchorPlacement: 'top-bottom',
         });
+
+        // Small hack to refresh animations on load
+        window.addEventListener('load', AOS.refresh);
     </script>
 </body>
 </html>
