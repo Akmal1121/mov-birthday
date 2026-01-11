@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For Alya ❤️</title>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧸</text></svg>">    
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
@@ -17,6 +17,14 @@
         /* --- RESET & CORE --- */
         html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; background-color: #000; color: white; overflow-x: hidden; transition: background 1s ease; }
+        
+        @media (max-width: 768px) {
+        /* Make decos visible on mobile without hovering */
+        .deco { opacity: 0.7 !important; filter: grayscale(0%) !important; }
+        /* Adjust text sizes for smaller screens */
+        h1 { font-size: 1.5rem; }
+        .ticket { transform: scale(0.95); margin: 5px 0; }
+}
 
         section {
             height: 100dvh; width: 100vw;
@@ -32,6 +40,180 @@
         section:hover .deco { opacity: 0.8; filter: grayscale(0%); pointer-events: auto; }
         .deco:hover { transform: scale(1.2) rotate(10deg); opacity: 1; }
         #secret-deco { cursor: pointer; }
+
+        /* --- NEW MAP WIDGET STYLES --- */
+        #distance-section {
+            background: #5a595d; /* Dark Night Sky color */
+            position: relative;
+            overflow: hidden;
+        }
+
+       /* --- FIXED MAP WIDGET CONTAINER --- */
+        .map-widget {
+            position: relative;
+            width: 95%;             /* Flexible on mobile */
+            max-width: 300px;       /* PREVENTS IT BEING TOO BIG ON PC */
+            aspect-ratio: 1 / 1;    /* Keeps it square and contained */
+            margin: 20px auto;       
+            
+            /* Background Map */
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/World_map_blank_without_borders.svg/2000px-World_map_blank_without_borders.svg.png');
+            background-size: 600%;  /* High zoom for detail */
+            background-position: 72% 35%; 
+            background-color: #ffffff; 
+            background-blend-mode: luminosity;
+
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+
+        /* Fix the Line size */
+        .connection-svg {
+            position: absolute;
+            top: 0; left: 0; 
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .dashed-path {
+            fill: none;
+            stroke: #ffffff; 
+            stroke-width: 3; /* Thickness adjusted for zoom */
+            stroke-dasharray: 10, 8; 
+            animation: dashScroll 20s linear infinite;
+        }
+
+        /* Ensure the distance bubble is inside and at the bottom */
+        .distance-bubble {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #289057;
+            color: rgb(255, 255, 255);
+            padding: 8px 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+
+        /* The Animated Line (SVG) */
+        connection-svg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            overflow: visible; /* Allow glow to spill out */
+        }
+
+        .dashed-path {
+            fill: none;
+            stroke: #000000; /* Soft Purple/Blue */
+            stroke-width: 1;
+            stroke-dasharray: 3, 4; /* Creates the dashes */
+            animation: dashScroll 20s linear infinite; /* Moves the dashes */
+            filter: drop-shadow(0 0 5px #a29bfe);
+        }
+
+        @keyframes dashScroll {
+            from { stroke-dashoffset: 0; }
+            to { stroke-dashoffset: -200; }
+        }
+
+        /* --- NEW PIN DESIGN (Marker Style) --- */
+
+        /* The main circular head of the pin */
+        .map-pin {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            /* This background color acts as the border */
+            background: #ffffff; 
+            padding: 3px; /* Thickness of the border ring */
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            z-index: 2;
+            animation: floatPin 3s ease-in-out infinite;
+        }
+
+        /* The image inside the pin */
+        .map-pin img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+            /* Optional: A tiny inner border to separate img from ring */
+            border: 1px solid rgba(60, 11, 11, 0.1); 
+        }
+
+        /* THE "MISSING ARROW" (Pointy tip at bottom) */
+        .map-pin::after {
+            content: '';
+            position: absolute;
+            bottom: -12px; /* Hangs below the circle */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            /* CSS Triangle Hack */
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            /* The color of the arrow must match the main pin background */
+            border-top: 14px solid #433f3f; 
+        }
+
+        /* --- COLOR VARIATIONS --- */
+
+        /* UAE Pin (Alya) - Default White/Pink */
+        .pin-uae {
+            top: 1%; left: 7%; /* Keep your current positions */
+            background: #f598e8; /* Soft pink border ring */
+        }
+        .pin-uae::after {
+            border-top-color: #000000; /* Match the arrow color */
+        }
+
+        /* MY Pin (Akmal) - Spotify Green */
+        .pin-my {
+            top: 60%; left: 84%; /* Keep your current positions */
+            background: #eff7f2; /* Green border ring */
+            animation-delay: 1.5s;
+        }
+        .pin-my::after {
+            border-top-color: #1c221e; /* Match the green arrow */
+        }
+
+
+        /* --- UPDATED LABELS & ANIMATION --- */
+
+        .pin-label {
+            position: absolute;
+            /* Pushed down further to clear the new arrow tip */
+            bottom: -35px; 
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+            white-space: nowrap;
+            text-shadow: 0 2px 4px black;
+            background: rgba(0,0,0,0.5); /* Small dark background for readability */
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        @keyframes floatPin {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
 
         /* --- 1. NEW FEATURE: CURSOR TRAIL --- */
         .cursor-heart { position: fixed; pointer-events: none; color: #1DB954; font-size: 1.2rem; z-index: 20000; user-select: none; animation: flyOut 1s forwards; }
@@ -92,31 +274,7 @@
 
         /* --- COMPONENTS --- */
         h1 { font-size: 1.8rem; margin: 10px 0; font-weight: 900; z-index: 2; }
-        
-        /* --- CAKE & 3-FLAME ANIMATION (FIXED) --- */
-        .cake-container { position: relative; margin: 30px 0; display: inline-block; }
-        .cake-emoji { font-size: 8rem; display: block; line-height: 1; }
-        .flame-container { 
-            position: absolute; 
-            top: -30px; /* Positioned right on the wick */
-            left: 50%; 
-            transform: translateX(-50%); 
-            width: 40px; height: 50px; 
-            pointer-events: none; 
-            z-index: 10;
-        }
-        .mini-flame { position: absolute; opacity: 0; transition: 0.3s; text-shadow: 0 0 15px orange; }
-        /* Positioning flames on the wick */
-        .f1 { top: 15px; left: 8px; font-size: 2rem; }
-        .f2 { top: 18px; left: 2px; font-size: 1.8rem; }
-        .f3 { top: 16px; left: 14px; font-size: 1.9rem; }
-
-        .flame-active .mini-flame { opacity: 0.9; }
-        .flame-active .f1 { animation: flicker 0.1s infinite alternate; }
-        .flame-active .f2 { animation: flicker 0.15s infinite alternate-reverse; }
-        .flame-active .f3 { animation: flicker 0.12s infinite alternate; }
-        @keyframes flicker { from { transform: scale(1) rotate(-2deg); opacity: 0.8; } to { transform: scale(1.1) rotate(2deg); opacity: 1; } }
-
+  
         /* --- DISTANCE SECTION (FIXED WIDTHS & PLANES) --- */
         .bg-distance-color { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; transition: background 1s ease; }
         .bg-distance-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1; pointer-events: none; }
@@ -125,19 +283,71 @@
         .night-mode-active .distance-content { opacity: 0.1; filter: blur(5px); pointer-events: none; transition: 0.5s; }
         .distance-content { gap: 15px; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 100%; } 
 
-        .clock-row { display: flex; gap: 15px; z-index: 2; width: 90%; max-width: 450px; justify-content: center; }
-        .clock-box { background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 12px; backdrop-filter: blur(5px); flex: 1; }
-        .time-text { font-size: 1.2rem; font-weight: bold; font-family: 'Courier Prime'; }
+        /* Change this from column to row */
+        .clock-column {
+            display: flex;
+            flex-direction: row; /* This puts them side-by-side */
+            justify-content: center; /* Centers them in the middle of the screen */
+            gap: 15px; /* Adds space between the two clocks */
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        /* Ensure individual boxes have a set width so they look uniform */
+        .clock-box {
+            flex: 1; /* Makes both boxes the same width */
+            max-width: 180px; /* Adjust this to make the boxes wider or thinner */
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .time-text { font-size: 1.2rem; font-weight: bold; font-family: 'Courier Prime';color: #fefefe; }
         .loc-text { font-size: 0.6rem; color: #e0e0e0; letter-spacing: 1px; margin-top: 5px; }
 
-        /* TICKETS & QUESTS (WIDER) */
-        .ticket-container { display: flex; flex-direction: column; gap: 15px; z-index: 2; width: 100%; align-items: center; position: relative; margin-top: 20px; }
+        /* --- TICKETS STACKED & OVERLAPPING --- */
+        .ticket-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 0px; /* Reduced gap because we are using margins to overlap */
+            z-index: 2; 
+            width: 100%; 
+            align-items: center; 
+            position: relative; 
+            margin-top: 40px; 
+        }
+
         .ticket { 
             background: linear-gradient(to right, #ffffff, #f0f2f5); 
-            color: black; width: 95%; max-width: 450px; /* WIDER */
-            border-radius: 12px; overflow: hidden; display: flex; 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5); position: relative; z-index: 2;
+            color: black; 
+            width: 95%; 
+            max-width: 450px; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            display: flex; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5); 
+            position: relative; 
+            transition: all 0.3s ease; /* Smooth move when hovering */
         }
+
+        /* THE STACKING TRICK */
+        /* This selects any ticket that follows another ticket */
+        .ticket + .ticket {
+            margin-top: -50px;
+            margin-right: 50px; /* Pulls the second ticket UP to overlap the first */
+        }
+
+        /* ROTATION FOR THE "MESSY" LOOK */
+        .ticket:nth-child(1) { transform: rotate(-1.5deg); z-index: 1; }
+        .ticket:nth-child(2) { transform: rotate(2deg); z-index: 2; }
+
+        /* HOVER EFFECT: Lift the ticket when Alya touches it */
+        .ticket:hover {
+            transform: translateY(-20px) scale(1.03) rotate(0deg) !important;
+            z-index: 10; /* Brings it to the very front */
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+        }
+
         .ticket-left { padding: 15px; flex: 2; border-right: 2px dashed #ccc; text-align: left; position: relative; }
         .ticket-right { padding: 10px; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #1DB954; color: white; }
         .ticket-val { font-size: 1rem; font-weight: bold; margin-bottom: 2px; font-family: 'Courier Prime'; }
@@ -188,6 +398,156 @@
         .vol-slider { width: 60px; height: 4px; appearance: none; background: #555; border-radius: 2px; outline: none; }
         .vol-slider::-webkit-slider-thumb { appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #1DB954; cursor: pointer; }
 
+        /* --- UPDATED: MUSIC BAR LAYOUT --- */
+        .music-bar {
+            background: rgba(24, 24, 24, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #333;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Reduced overall gap */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 280px; 
+            transition: width 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            
+            /* CRITICAL FIX: Allow popup to show outside the bar */
+            overflow: visible !important; 
+        }
+
+        .music-bar.retracted {
+            width: 50px;
+            height: 50px;
+            padding: 0;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            overflow: hidden !important; /* Hide contents when closed */
+        }
+
+        /* --- SCROLLING TEXT FIX --- */
+        .track-info-container {
+            flex: 1;
+            min-width: 0;
+            margin-right: 10px;
+            position: relative;
+            height: 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden; 
+            mask-image: linear-gradient(to right, black 85%, transparent 100%); /* Fades text out at the end */
+            -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+        }
+
+        .scrolling-text {
+            white-space: nowrap;
+            position: relative; /* Changed from absolute to keep flow */
+            animation: scroll-left 12s linear infinite;
+        }
+
+        /* Scroll Animation: Visible -> Scroll Left -> Snap Back */
+        @keyframes scroll-left {
+            0%, 15% { transform: translateX(0%); } /* Start visible & wait */
+            50% { transform: translateX(-100%); } /* Scroll all the way out */
+            50.01% { transform: translateX(100%); } /* Snap to right side instantly */
+            100% { transform: translateX(0%); } /* Scroll back in from right */
+        }
+
+       /* --- UPDATED ANIMATION: Middle -> Left, then Right -> Middle --- */
+        @keyframes scroll-left {
+            /* 1. Start: Sit in the middle (visible) */
+            0%, 15% { 
+                transform: translateX(0%); 
+            }
+            
+            /* 2. Scroll OUT to the LEFT */
+            45% { 
+                transform: translateX(-100%); 
+            }
+            
+            /* 3. Magic Teleport: Jump to the RIGHT instantly (while off-screen) */
+            45.01% { 
+                transform: translateX(100%); 
+            }
+            
+            /* 4. Scroll IN from the RIGHT back to Middle */
+            85%, 100% { 
+                transform: translateX(0%); 
+            }
+        }
+
+        /* --- TIGHTER BUTTON GROUP --- */
+        .controls-group {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Closer buttons */
+            margin-right: 5px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: #1DB954;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 0; /* Remove default padding */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .control-btn:hover { color: white; transform: scale(1.1); }
+
+        /* --- VERTICAL VOLUME POPUP --- */
+        .volume-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .volume-popup {
+            position: absolute;
+            bottom: 45px; /* Push it above the bar */
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20, 20, 20, 0.95);
+            padding: 15px 10px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.6);
+            z-index: 10000;
+            width: 30px;
+            height: 120px;
+        }
+
+        .volume-popup.show {
+            display: flex;
+            animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* The Vertical Slider */
+        .vol-slider {
+            writing-mode: bt-lr; /* IE/Edge */
+            appearance: slider-vertical; /* Chrome/Safari/Edge */
+            width: 8px;
+            height: 100px;
+            background: #444;
+            outline: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        @keyframes popUp {
+            from { opacity: 0; transform: translate(-50%, 20px) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+        }
+
         /* UTILS */
         .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 95%; max-width: 450px; }
         .gallery-img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; background: #333; transition: transform 0.3s; }
@@ -202,6 +562,84 @@
         
         .dose-box { width: 95%; max-width: 450px; border: 2px dashed #555; border-radius: 15px; padding: 25px; margin-bottom: 30px; background: rgba(0,0,0,0.2); display: flex; flex-direction: column; align-items: center; }
 
+        /* --- TEXT SCROLLING (MARQUEE) --- */
+        .track-info-container {
+            flex: 1;
+            overflow: hidden; /* Mask the scrolling text */
+            margin-right: 10px;
+            position: relative;
+            height: 35px; /* Fixed height for text area */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .scrolling-text {
+            white-space: nowrap;
+            position: absolute;
+            animation: scroll-left 10s linear infinite; /* Adjust speed here */
+            transform: translateX(0%);
+        }
+
+        /* Pause scrolling on hover so user can read */
+        .track-info-container:hover .scrolling-text {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll-left {
+            0% { transform: translateX(0%); }
+            20% { transform: translateX(0%); } /* Pause at start */
+            100% { transform: translateX(-100%); }
+        }
+
+        /* --- BUTTON GROUPING --- */
+        .controls-group {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Space between Prev, Play, Next */
+            margin-right: 15px;
+        }
+
+        /* --- VOLUME POPUP --- */
+        .volume-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .volume-popup {
+            position: absolute;
+            bottom: 140%; /* Position above the icon */
+            left: 50%;
+            transform: translateX(-50%);
+            background: #222;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            display: none; /* Hidden by default */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            z-index: 10000;
+        }
+
+        .volume-popup.show {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 0.2s ease;
+        }
+
+        /* Vertical slider styling */
+        .vol-slider {
+            width: 6px;
+            height: 80px; /* Make it vertical height */
+            appearance: slider-vertical; /* Standard vertical slider */
+            background: #555;
+            outline: none;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
         /* --- MOOD RING & TOOLTIPS (NEW) --- */
         .mood-ring { display: flex; gap: 25px; margin-top: 15px; }
         .mood-item { position: relative; display: inline-block; }
@@ -209,7 +647,7 @@
         .mood-btn:hover { filter: grayscale(0); transform: scale(1.2); }
         .mood-tooltip {
             visibility: hidden; width: 120px; background-color: #333; color: #fff; text-align: center;
-            border-radius: 6px; padding: 5px 0; position: absolute; z-index: 1;
+            border-radius: 6px; padding: 5px 0; position: absolute; z-index: 3;
             bottom: 125%; left: 50%; margin-left: -60px; opacity: 0; transition: opacity 0.3s;
             font-size: 0.7rem; pointer-events: none;
         }
@@ -221,7 +659,7 @@
 
 
         /* SPOTIFY CARD UPDATED */
-        .wrapped-card { width: 90%; max-width: 350px; height: 520px; background: linear-gradient(135deg, #8A2387, #E94057, #F27121); border-radius: 20px; padding: 30px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: left; position: relative; overflow: hidden; }
+        .wrapped-card { width: 90%; max-width: 350px; height: 520px; background: linear-gradient(135deg, #8f33a2, #e45c6e, #f544b4); border-radius: 20px; padding: 30px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: left; position: relative; overflow: hidden; }
         .counter-subtext { font-size: 0.9rem; opacity: 0.9; margin-top: 5px; font-family: 'Courier Prime'; }
 
         .voice-capsule { width: 140px; height: 140px; border-radius: 50%; background: #222; border: 3px solid #1DB954; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; margin-top: 20px; position: relative; overflow: hidden; box-shadow: 0 0 15px rgba(29, 185, 84, 0.5); }
@@ -262,21 +700,40 @@
         .bg-dark { background: radial-gradient(circle at center, #2a2a2a 0%, #121212 100%); }
         .bg-pink { background: radial-gradient(circle at center, #3a1a25 0%, #121212 100%); }
         .bg-cake { background: radial-gradient(circle at center, #1a0b1a 0%, #000 100%); }
+    
+        /* --- UPDATE: MUSIC CONTROLS --- */
+        .music-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .control-btn {
+            background: none;
+            border: none;
+            color: #1DB954; /* Spotify Green */
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .control-btn:hover {
+            color: white;
+            transform: scale(1.2);
+        }
 
     </style>
 </head>
 <body onload="startTime()">
-
-    <div id="login-screen">
+    
+  <div id="login-screen"style="display: none;">
         <h2 style="margin-bottom: 10px;">Hi, Alya</h2>
         <div style="font-size: 3rem; margin-bottom: 20px;">👤</div>
         <p style="font-size: 0.8rem; margin-bottom: 10px; color: #777;">Your Important Day (DDMMYYYY)</p>
         <input type="password" id="passcode" class="login-input" placeholder="********">
         <button class="btn-spotify" onclick="attemptLogin()">LOGIN</button>
         <p id="login-error" style="color: #ff4757; margin-top: 10px; display: none;">Wrong password!</p>
-    </div>
-
-    <div id="pearl-overlay">
+    </div> 
+    
+    <div id="pearl-overlay"style="display: none;">
         <h1 style="color: #ff4757; background: black; padding: 5px 20px;">⚠️ SECURITY ALERT ⚠️</h1>
         <img src="https://placekitten.com/300/300" class="pearl-img" alt="Pearl"> 
         <h2 id="pearl-status" style="margin-top: 20px;">CHECKING URL SAFETY...</h2>
@@ -289,6 +746,14 @@
             <p>I knew you would say yes! ❤️</p>
             <button class="btn-spotify" onclick="closeCustomAlert()" style="margin-top: 15px;">OKAY</button>
         </div>
+    </div>
+
+    <div id="secret-unlock-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center;">
+    <div class="custom-alert-box" style="background: #191414; padding: 30px; border: 2px solid #1DB954; border-radius: 15px; text-align: center; max-width: 350px; box-shadow: 0 0 20px rgba(29, 185, 84, 0.5);">
+        <h3 style="color: #1DB954; margin-bottom: 15px; font-size: 1.5rem;">Akmal says:</h3>
+        <p style="color: white; font-size: 1.1rem; margin-bottom: 20px;">Secret Section Unlocked! <br>Scroll down to find it. ❤️</p>
+        <button class="btn-spotify" onclick="closeSecretAlert()" style="padding: 10px 25px; font-size: 1rem;">OKAY</button>
+    </div>
     </div>
 
     <div id="contract-reveal">
@@ -334,107 +799,148 @@
 
     <div id="music-container">
         <div class="music-bar retracted" id="music-bar" onclick="expandMusic()">
-            <span class="retracted-icon">🎵</span>
-            <div class="album-art"><img src="https://i.scdn.co/image/ab67616d0000b2738b52c6b9bc3d396a84c2f682" style="width: 100%; height: 100%; object-fit: cover;"></div>
-            <div style="display: flex; flex-direction: column; align-items: flex-start; margin-right: 10px; flex: 1;">
-                <span style="font-size: 0.7rem; font-weight: bold; white-space: nowrap;">Tower of Memories</span>
-                <span style="font-size: 0.5rem; color: #b3b3b3;">IVRY</span>
-            </div>
-            <button id="play-btn" onclick="event.stopPropagation(); toggleMusic()" style="background: none; border: none; color: #1DB954; font-size: 1.2rem; cursor: pointer;">▶</button>
-            <input type="range" class="vol-slider" min="0" max="100" value="20" onclick="event.stopPropagation()" oninput="changeVolume(this.value)">
-            <audio id="bg-music" loop><source src="music.mp3" type="audio/mpeg"></audio>
+    
+    <div class="retracted-icon">
+        <img id="mini-art" src="https://i1.sndcdn.com/artworks-e0XT6VmlnFJ1-0-t1080x1080.png" style="width: 100%; height: 100%; border-radius: 50%;">
+    </div>
+
+    <div class="album-art">
+        <img id="track-art" src="https://i1.sndcdn.com/artworks-e0XT6VmlnFJ1-0-t1080x1080.png" style="width: 100%; height: 100%; object-fit: cover;">
+    </div>
+
+    <div class="track-info-container">
+        <div id="scrolling-wrapper">
+            <div id="track-title" style="font-size: 0.8rem; font-weight: bold;">Loading...</div>
+            <div id="track-artist" style="font-size: 0.6rem; color: #b3b3b3;">Loading...</div>
         </div>
+    </div>
+
+    <div class="controls-group" onclick="event.stopPropagation()">
+        <button class="control-btn" onclick="prevSong()" style="font-size: 1rem;">⏮</button>
+        <button id="play-btn" class="control-btn" onclick="toggleMusic()" style="font-size: 1.4rem;">▶</button>
+        <button class="control-btn" onclick="nextSong()" style="font-size: 1rem;">⏭</button>
+    </div>
+
+    <div class="volume-container" onclick="event.stopPropagation()">
+        <button class="control-btn" onclick="toggleVolumePopup()">🔊</button>
+        
+        <div id="vol-popup" class="volume-popup">
+            <input type="range" class="vol-slider" orient="vertical" min="0" max="100" value="10" oninput="changeVolume(this.value)">
+            <span id="vol-text" style="font-size: 0.6rem; margin-top: 10px; font-weight: bold; color: white;">10</span>
+        </div>
+    </div>
+
+    <audio id="bg-music"><source src="music.mp3" type="audio/mpeg"></audio>
+    <audio id="cake-music" ><source src="cake.mp3" type="audio/mpeg"></audio>
+</div>
     </div>
     
     <audio id="secret-sound"><source src="secret-sound.mp3" type="audio/mpeg"></audio>
     <audio id="secret-audio"><source src="secret.mp3" type="audio/mpeg"></audio>
+    <audio id="secret-audio1"><source src="secret1.mp3" type="audio/mpeg"> </audio>
 
-    <div id="main-site" style="display: none;">
+    <div id="main-site" style="display: block;">
 
-        <section class="bg-cake">
-            <div class="deco" style="top: 10%; left: 5%;">✨</div>
-            <div class="deco" style="bottom: 15%; right: 10%;">🎈</div>
-            
-            <div data-aos="fade-down" style="font-size: 3rem;">🎉</div>
-            <h1 data-aos="zoom-in" style="margin-bottom: 5px;">Happy Birthday</h1>
-            <h1 style="font-size: 3rem; color: #1DB954;" data-aos="zoom-in" data-aos-delay="300">ALYA</h1>
-            
-            <div class="cake-wrapper">
-                <div class="cake">
-                    <div class="plate"></div>
-                    <div class="layer layer-bottom"></div>
-                    <div class="layer layer-middle"></div>
-                    <div class="layer layer-top"></div>
-                    <div class="icing"></div>
-                    <div class="drip drip1"></div>
-                    <div class="drip drip2"></div>
-                    <div class="drip drip3"></div>
-                    <div class="drip drip4"></div>
-                    <div class="candle c1"><div class="fuego"></div><div class="smoke"></div></div>
-                    <div class="candle c2"><div class="fuego"></div><div class="smoke"></div></div>
-                    <div class="candle c3"><div class="fuego"></div><div class="smoke"></div></div>
-                    <div class="candle c4"><div class="fuego"></div><div class="smoke"></div></div>
-                    <div class="candle c5"><div class="fuego"></div><div class="smoke"></div></div>
-                </div>
-            </div>
+        <section class="bg-cake" id="cake-section">
+    <div class="deco" style="top: 10%; left: 5%;">✨</div>
+    <div class="deco" style="bottom: 15%; right: 10%;">🎈</div>
+    
+    <div data-aos="fade-down" style="font-size: 3rem;">🎉</div>
+    <h1 data-aos="zoom-in" style="margin-bottom: 5px;">Happy Birthday</h1>
+    <h1 style="font-size: 3rem; color: #e443a4;" data-aos="zoom-in" data-aos-delay="300">ALYA</h1>
+    
+    <div class="cake-wrapper">
+        <div class="cake">
+            <div class="plate"></div>
+            <div class="layer layer-bottom"></div>
+            <div class="layer layer-middle"></div>
+            <div class="layer layer-top"></div>
+            <div class="icing"></div>
+            <div class="drip drip1"></div>
+            <div class="drip drip2"></div>
+            <div class="drip drip3"></div>
+            <div class="drip drip4"></div>
+            <div class="candle c1"><div class="fuego"></div><div class="smoke"></div></div>
+            <div class="candle c2"><div class="fuego"></div><div class="smoke"></div></div>
+            <div class="candle c3"><div class="fuego"></div><div class="smoke"></div></div>
+            <div class="candle c4"><div class="fuego"></div><div class="smoke"></div></div>
+            <div class="candle c5"><div class="fuego"></div><div class="smoke"></div></div>
+        </div>
+    </div>
 
-            <p id="candle-instruction" style="font-size: 0.9rem; opacity: 0.8; margin-top: 130px;">(Blow into mic to extinguish!)</p>
-            <button id="mic-btn" class="btn-spotify" style="margin-top: 20px;" onclick="startMicrophone()">🎤 START BLOWING</button>
-            <h2 id="wish-msg" style="color: #1DB954; opacity: 0; transition: 1s; margin-top: 20px;">WISH GRANTED! 🥳</h2>
-        </section>
+    <p id="candle-instruction" style="font-size: 0.9rem; opacity: 0.8; margin-top: 130px;">(Blow into mic to extinguish!)</p>
+    <button id="mic-btn" class="btn-spotify" style="margin-top: 20px;" onclick="startMicrophone(); playCakeMusic()">🎤 START BLOWING</button>
+    <h2 id="wish-msg" style="color: #1DB954; opacity: 0; transition: 1s; margin-top: 20px;">WISH GRANTED! 🥳</h2>
+</section>
 
         <section id="distance-section">
-             <div class="deco" style="top: 5%; right: 5%;">🌍</div>
-            <div class="deco" style="bottom: 10%; left: 5%;">💌</div>
+    <div class="deco" style="top: 5%; right: 5%;">🌍</div>
+    <div class="deco" style="bottom: 10%; left: 5%;">💌</div>
 
-            <div class="bg-distance-color"></div>
-            <div class="bg-distance-overlay"></div>
-            
-            <div class="distance-content">
-                <h2 data-aos="fade-down" style="margin-top: 10px;">The Distance</h2>
-                <div style="font-size: 2.5rem; font-weight: 900; margin: 10px 0;" data-aos="zoom-in">5,600 km</div>
-                
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2Q5OG00bnI4M2c3a3F0Z3Z4bnIyZ3Z4bnIyZ3Z4bnIyZ3Z4bnIyZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/13CoXDiaCcCZr91/giphy.gif" alt="Pixel Cat" style="width: 60px; margin-bottom: 15px;">
+    <div class="bg-distance-color"></div>
+    <div class="bg-distance-overlay"></div>
 
-                <div class="clock-row" data-aos="fade-up">
-                    <div class="clock-box"><div class="time-text" id="time-my">00:00</div><div class="loc-text">AKMAL (MY)</div></div>
-                    <div class="clock-box"><div class="time-text" id="time-uae">00:00</div><div class="loc-text">ALYA (UAE)</div></div>
-                </div>
-                <div class="quest-container" data-aos="fade-up">
-                    <h3 style="text-align: left; margin-bottom: 10px; font-size: 0.9rem;">📜 Quest Log</h3>
-                    <div class="quest-item quest-done"><div class="quest-checkbox">✓</div><div>2019 - 2021: The First Match</div></div>
-                    <div class="quest-item quest-done"><div class="quest-checkbox">✓</div><div>2025: Second Chance Accepted</div></div>
-                    <div class="quest-item quest-active"><div class="quest-checkbox" style="background: none; color: #ff00de;">●</div><div>Mission: Survive the Distance</div></div>
-                </div>
-                <div class="ticket-container">
-                    <div class="plane-wrapper">
-                        <div class="plane-top">✈️</div>
-                        <div class="plane-bottom">✈️</div>
-                    </div>
+    <div class="distance-content">
+        <h2 data-aos="fade-down">The Distance</h2>
 
-                    <div class="ticket" data-aos="flip-up">
-                        <div class="ticket-left">
-                            <div style="font-size: 0.7rem; color: #888;">PASSENGER</div><div class="ticket-val">ALYA</div><div class="ticket-flight"><span>UAE</span> ✈️ <span>MY</span></div><div class="ticket-val" style="color: #1DB954;">SOON™</div>
-                            <img src="ticket-sticker.gif" class="ticket-sticker" alt="sticker">
-                        </div>
-                        <div class="ticket-right"><div style="transform: rotate(-90deg); font-weight: bold; font-size: 1.2rem;">BOARDING</div></div>
-                    </div>
-                    <div class="ticket" data-aos="flip-up" data-aos-delay="100">
-                        <div class="ticket-left">
-                            <div style="font-size: 0.7rem; color: #888;">PASSENGER</div><div class="ticket-val">AKMAL</div><div class="ticket-flight"><span>MY</span> ✈️ <span>UAE</span></div><div class="ticket-val" style="color: #1DB954;">SOON™</div>
-                             <img src="ticket-sticker.gif" class="ticket-sticker" alt="sticker">
-                        </div>
-                        <div class="ticket-right"><div style="transform: rotate(-90deg); font-weight: bold; font-size: 1.2rem;">BOARDING</div></div>
-                    </div>
+        <div class="map-widget" data-aos="zoom-in">
+            <svg class="connection-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path class="dashed-path" d="M 15 22 Q 50 10 88 67" />
+            </svg>
+            <div class="map-pin pin-uae" style="top: 15%; left: 4%;">
+                <img src="https://placehold.co/100x100/pink/white?text=Alya" alt="Alya">
+                <div class="pin-label">UAE</div>
+            </div>
+            <div class="map-pin pin-my" style="top: 52%; left: 80%;">
+                <img src="https://placehold.co/100x100/1DB954/white?text=Akmal" alt="Akmal">
+                <div class="pin-label">MY</div>
+            </div>
+            <div class="distance-bubble"><span>✈️</span> 5,600 km</div>
+        </div>
+
+        <div class="stats-container" data-aos="fade-up">
+            <div class="clock-column">
+                <div class="clock-box">
+                    <div class="time-text" id="time-uae">00:00</div>
+                    <div class="loc-text">UAE (Alya)</div>
                 </div>
-                <button class="btn-spotify night-mode-btn" onclick="toggleNightMode()">🌘 Night Mode</button>
+                <div class="clock-box">
+                    <div class="time-text" id="time-my">00:00</div>
+                    <div class="loc-text">MY (Akmal)</div>
+                </div>
             </div>
 
-            <div class="moonlight-msg">
-                <div style="font-size: 1.3rem; margin-bottom: 25px; line-height: 1.6;">"My moon follows your sun,<br>united by the same moonlight."<br><br><span style="font-size: 2.5rem;">☀️ ❤️ 🌙</span></div>
-                <button class="btn-spotify night-mode-btn" onclick="toggleNightMode()">Turn Lights On</button>
+            <div class="quest-container">
+                <h3 style="text-align: left; margin-bottom: 10px; font-size: 0.9rem;">📜 Quest Log</h3>
+                <div class="quest-item quest-done"><div class="quest-checkbox">✓</div><div>2019 - 2021: The First Match</div></div>
+                <div class="quest-item quest-done"><div class="quest-checkbox">✓</div><div>2025: Second Chance Accepted</div></div>
+                <div class="quest-item quest-active"><div class="quest-checkbox">●</div><div>Mission: Survive the Distance</div></div>
+                <div class="quest-item quest-done"><div class="quest-checkbox">?</div><div>2026+ : Coming Soon</div></div>
             </div>
-        </section>
+        </div>
+
+        <div class="ticket-row" data-aos="fade-up">
+            <div class="ticket">
+                <div class="ticket-left">
+                    <div style="font-size: 0.7rem; color: #888;">PASSENGER</div><div class="ticket-val">ALYA</div>
+                    <div class="ticket-flight"><span>UAE</span> ✈️ <span>MY</span></div>
+                    <div class="ticket-val" style="color: #1DB954;">SOON™</div>
+                </div>
+                <div class="ticket-right"><div style="transform: rotate(-90deg); font-weight: bold;">BOARDING</div></div>
+            </div>
+            <div class="ticket">
+                <div class="ticket-left">
+                    <div style="font-size: 0.7rem; color: #888;">PASSENGER</div><div class="ticket-val">AKMAL</div>
+                    <div class="ticket-flight"><span>MY</span> ✈️ <span>UAE</span></div>
+                    <div class="ticket-val" style="color: #1DB954;">SOON™</div>
+                </div>
+                <div class="ticket-right"><div style="transform: rotate(-90deg); font-weight: bold;">BOARDING</div></div>
+            </div>
+        </div>
+
+        <button class="btn-spotify night-mode-btn" onclick="toggleNightMode()">🌘 Night Mode</button>
+    </div>
+</section>
 
         <section class="bg-dark">
              <div class="deco" style="top: 10%; left: 10%;">🎧</div>
@@ -448,7 +954,8 @@
                 </div>
                 
                 <div style="margin: 20px 0;">
-                    <div style="opacity: 0.9; font-size: 1rem;">Days Since 2nd Chance ❤️</div>
+                    <div style="opacity: 0.9; font-size: 2.6rem; font-weight: 1000; color: #fdfdfd;">Day</div>
+                    <div style="opacity: 0.9; font-size: 1rem; font-weight: 1000; color: #fdfdfd;">Since 2nd Chance ❤️</div>
                     <div id="days-together-counter" style="font-size: 2.5rem; font-weight: 900; color: #1DB954;">Loading...</div>
                     <div id="total-hours-minutes" class="counter-subtext">Loading hours...</div>
                     <div class="counter-subtext" style="margin-top: 5px;">(Since 12.04.2025)</div>
@@ -465,13 +972,13 @@
         <section class="bg-dark">
             <div class="deco" style="top: 5%; right: 15%;">📸</div>
             <h1 data-aos="fade-right">Daily Dose</h1>
-            <div class="dose-box" style="position: relative; z-index: 2;">
+            <div class="dose-box" style="position: relative; z-index: 5;">
                 <div id="love-display" style="min-height: 60px; color: #1DB954; font-family: 'Courier Prime'; display: flex; align-items: center; justify-content: center; text-align: center; margin-bottom: 20px; font-size: 1.1rem;">Click below...</div>
                 <button class="btn-spotify" onclick="generateLove()">GENERATE REASON 🎲</button>
             </div>
             
             <p style="margin-top: 20px; font-size: 1.1rem;">How are you feeling?</p>
-            <div class="mood-ring" style="position: relative; z-index: 2;">
+            <div class="mood-ring" style="position: relative; z-index: 5;">
                 <div class="mood-item">
                     <div class="mood-btn" onclick="changeMood('happy')">☀️</div>
                     <span class="mood-tooltip">I'm Happy!</span>
@@ -559,6 +1066,245 @@
     </div>
 
     <script>
+
+        /* --- MUSIC CAKE --- */
+        function playCakeMusic() {
+        const bgMusic = document.getElementById('bg-music');
+        const cakeMusic = document.getElementById('cake-music');
+        
+        // 1. Pause the main background music
+        if(bgMusic && !bgMusic.paused) {
+            bgMusic.pause();
+            document.getElementById('play-btn').innerText = "▶"; // Reset main play button UI
+        }
+
+        // 2. Play the birthday cake music
+        if(cakeMusic) {
+            cakeMusic.volume = 0.10;
+            cakeMusic.currentTime = 0; // Start from beginning
+            cakeMusic.play().then(() => {
+                console.log("Birthday music started via button!");
+            }).catch(e => {
+                console.log("Error playing cake music:", e);
+            });
+        }
+    }
+
+        // --- STOP MUSIC ON SCROLL ---
+        const cakeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // If user LEAVES the cake section (isIntersecting is false)
+                if (!entry.isIntersecting) {
+                    const cakeMusic = document.getElementById('cake-music');
+
+                    // 1. Stop Birthday Music
+                    if (cakeMusic && !cakeMusic.paused) {
+                        console.log("👋 Left Cake Zone - Stopping Birthday Music");
+                        cakeMusic.pause();
+                        cakeMusic.currentTime = 0; // Reset
+                    }
+
+                    // 2. Resume Main Background Music (if it was paused)
+                    if (bgMusic && bgMusic.paused) {
+                        bgMusic.volume = 0.02; // Restore volume
+                        bgMusic.play().catch(e => console.log("Bg music resume error", e));
+                        document.getElementById('play-btn').innerText = "⏸";
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Start watching the cake section
+        const cakeSec = document.getElementById('cake-section');
+        if (cakeSec) { cakeObserver.observe(cakeSec); }
+
+        /* --- AUTO-SWAP MUSIC ON SCROLL --- */
+
+            // 1. Select the elements
+            const cakeSection = document.querySelector('.bg-cake');
+            const bgMusic = document.getElementById('bg-music');
+            const cakeMusic = document.getElementById('cake-music');
+
+            // 2. Define the "DJ" Sensor
+            const musicObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    
+                    // CASE A: User enters the Cake Section
+                    if (entry.isIntersecting) {
+                        
+                        // 1. Pause Main Playlist
+                        if (!bgMusic.paused) {
+                            bgMusic.pause();
+                            document.getElementById('play-btn').innerText = "▶"; // Update UI
+                        }
+
+                        // 2. Play Birthday Track
+                        cakeMusic.volume = 0.3; // Set volume
+                        cakeMusic.play().catch(e => console.log("Audio waiting for interaction"));
+                    } 
+                    
+                    // CASE B: User scrolls AWAY from Cake Section
+                    else {
+                        
+                        // 1. Stop Birthday Track
+                        if (!cakeMusic.paused) {
+                            cakeMusic.pause();
+                            cakeMusic.currentTime = 0; // Reset to start
+                        }
+
+                        // 2. Resume Main Playlist (if it was loaded)
+                       
+                    }
+                });
+            }, { threshold: 0.3 }); // Swaps when 30% of cake section is visible
+
+            // NOTE: Ensure your 'attemptLogin' function still observes the section:
+            // if (cakeSection) { musicObserver.observe(cakeSection); }
+
+
+        /* --- UPDATED LOGIN FUNCTION --- */
+        function attemptLogin() {
+            // Check password
+            if(document.getElementById('passcode').value === '15042005') {
+                
+                // Hide Login
+                document.getElementById('login-screen').style.display = 'none';
+                
+                // Show Security Check (Pearl)
+                document.getElementById('pearl-overlay').style.display = 'flex';
+                
+                setTimeout(() => {
+                    // Hide Security Check
+                    document.getElementById('pearl-overlay').style.display = 'none';
+                    
+                    // Show Main Site
+                    document.getElementById('main-site').style.display = 'block';
+                    
+                    // Init Animations
+                    AOS.init({ duration: 800 });
+
+                    // *** NEW: Start the Music Sensor Now ***
+                    // We do this here because the user has now clicked "Login", 
+                    // so the browser allows audio to play.
+                    if (cakeSection) {
+                        musicObserver.observe(cakeSection);
+                    }
+
+                }, 3000);
+            } else { 
+                document.getElementById('login-error').style.display = 'block'; 
+            }
+        }
+
+        /* --- UPDATED MUSIC LOGIC --- */
+        const playlist = [
+            {
+                title: "Tower of Memories", 
+                artist: "IVRY",
+                src: "music.mp3", 
+                art: "https://i1.sndcdn.com/artworks-e0XT6VmlnFJ1-0-t1080x1080.png"
+            },
+            {
+                title: "A Very Long Song Title To Test The Scrolling Feature",
+                artist: "Test Artist",
+                src: "song2.mp3",
+                art: "https://placehold.co/100x100/1DB954/white?text=Music"
+            }
+        ];
+
+        let currentTrackIdx = 0;
+        const audio = document.getElementById('bg-music');
+        const playBtn = document.getElementById('play-btn');
+        const titleEl = document.getElementById('track-title');
+        const artistEl = document.getElementById('track-artist');
+        const artEl = document.getElementById('track-art');
+        const miniArtEl = document.getElementById('mini-art');
+        const scrollWrapper = document.getElementById('scrolling-wrapper');
+
+        // 1. Set Initial Volume to 10%
+        audio.volume = 0.02; 
+
+        // Initialize
+        loadSong(currentTrackIdx);
+
+        function loadSong(index) {
+            const track = playlist[index];
+            audio.src = track.src;
+            titleEl.innerText = track.title;
+            artistEl.innerText = track.artist;
+            artEl.src = track.art;
+            miniArtEl.src = track.art;
+            
+            checkScroll();
+
+            if(index !== 0 || !audio.paused) {
+                audio.play();
+                playBtn.innerText = "⏸";
+                document.getElementById('music-bar').classList.remove('retracted');
+            }
+        }
+
+        function checkScroll() {
+            scrollWrapper.classList.remove('scrolling-text');
+            void scrollWrapper.offsetWidth; // Trigger reflow
+            
+            // Check length to decide if we scroll
+            if (titleEl.innerText.length > 12) {
+                scrollWrapper.classList.add('scrolling-text');
+                scrollWrapper.style.paddingLeft = "100%"; 
+            } else {
+                scrollWrapper.style.paddingLeft = "0"; 
+                scrollWrapper.style.position = "static";
+            }
+        }
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerText = "⏸";
+                document.getElementById('music-bar').classList.remove('retracted');
+            } else {
+                audio.pause();
+                playBtn.innerText = "▶";
+            }
+        }
+
+        function nextSong() {
+            currentTrackIdx = (currentTrackIdx + 1) % playlist.length;
+            loadSong(currentTrackIdx);
+        }
+
+        function prevSong() {
+            currentTrackIdx = (currentTrackIdx - 1 + playlist.length) % playlist.length;
+            loadSong(currentTrackIdx);
+        }
+
+        // Volume Popup Logic
+        function toggleVolumePopup() {
+            const popup = document.getElementById('vol-popup');
+            // Toggle class 'show' to trigger CSS display flex
+            if (popup.classList.contains('show')) {
+                popup.classList.remove('show');
+            } else {
+                popup.classList.add('show');
+            }
+        }
+
+        function changeVolume(val) {
+            audio.volume = val / 100;
+            document.getElementById('vol-text').innerText = val;
+        }
+
+        // Close volume popup if clicking elsewhere
+        document.addEventListener('click', function(e) {
+            const volContainer = document.querySelector('.volume-container');
+            if (!volContainer.contains(e.target)) {
+                document.getElementById('vol-popup').classList.remove('show');
+            }
+        });
+
+        audio.addEventListener('ended', nextSong);
+
         // --- CONFIG DATE ---
         // CHANGE THIS TO YOUR START DATE (YYYY-MM-DD)
         const startDate = new Date("2025-04-12"); // Updated date per request
@@ -683,10 +1429,27 @@
             }
         }
 
+        // CURSOR TRAIL LOGIC
+        document.addEventListener('mousemove', function(e) {
+            // Limit creation rate to avoid lag
+            if (Math.random() < 0.1) { // 10% chance per move event
+                const heart = document.createElement('div');
+                heart.classList.add('cursor-heart');
+                heart.innerText = "💖"; // Sparkle or Heart
+                heart.style.left = e.pageX + 'px';
+                heart.style.top = e.pageY + 'px';
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 1000);
+            }
+        });
+
         // MUSIC & VOLUME & RETRACTABLE LOGIC
         document.addEventListener("DOMContentLoaded", () => {
             const audio = document.getElementById('bg-music');
-            audio.volume = 0.2; 
+            audio.volume = 0.05; 
         });
 
         function expandMusic() {
@@ -764,128 +1527,109 @@
 
         // --- NEW: MICROPHONE BLOW DETECTION ---
         function startMicrophone() {
-    // 1. Check for browser support
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
-            
-            // 2. Create AudioContext
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            const audioContext = new AudioContext();
-            
-            // IMPORTANT: Resume context if it's suspended (browser policy)
-            if (audioContext.state === 'suspended') {
-                audioContext.resume();
-            }
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                const audioContext = new AudioContext();
+                const analyser = audioContext.createAnalyser();
+                const microphone = audioContext.createMediaStreamSource(stream);
+                const scriptProcessor = audioContext.createScriptProcessor(2048, 1, 1);
 
-            const analyser = audioContext.createAnalyser();
-            const microphone = audioContext.createMediaStreamSource(stream);
-            const scriptProcessor = audioContext.createScriptProcessor(2048, 1, 1);
+                analyser.smoothingTimeConstant = 0.8;
+                analyser.fftSize = 1024;
 
-            analyser.smoothingTimeConstant = 0.8;
-            analyser.fftSize = 1024;
+                microphone.connect(analyser);
+                analyser.connect(scriptProcessor);
+                scriptProcessor.connect(audioContext.destination);
 
-            microphone.connect(analyser);
-            analyser.connect(scriptProcessor);
-            scriptProcessor.connect(audioContext.destination);
+                scriptProcessor.onaudioprocess = function() {
+                    const array = new Uint8Array(analyser.frequencyBinCount);
+                    analyser.getByteFrequencyData(array);
+                    let values = 0;
+                    for (let i = 0; i < array.length; i++) {
+                        values += array[i];
+                    }
 
-            // 3. Process Audio
-            scriptProcessor.onaudioprocess = function() {
-                const array = new Uint8Array(analyser.frequencyBinCount);
-                analyser.getByteFrequencyData(array);
-                
-                let values = 0;
-                for (let i = 0; i < array.length; i++) {
-                    values += array[i];
-                }
-                const average = values / array.length;
+                    const average = values / array.length;
 
-                // Debugging: Log volume to console to check sensitivity
-                // console.log(average); 
+                    // THRESHOLD MET (BLOW DETECTED)
+                    if (average > 40) {
+                        
+                        // 1. Visuals: Extinguish Flames
+                        document.querySelectorAll('.fuego').forEach(f => {
+                            f.style.opacity = '0';
+                            f.style.animation = 'none';
+                        });
+                        document.querySelectorAll('.smoke').forEach(s => {
+                            s.style.opacity = '1';
+                            s.style.animation = 'smokeRise 1s forwards';
+                        });
 
-                // 4. Threshold Logic
-                // Lowered slightly to 40 to make it easier to trigger
-                if (average > 40) { 
-                    
-                    // A. Extinguish Flames
-                    const flames = document.querySelectorAll('.fuego');
-                    flames.forEach(flame => {
-                        flame.style.transition = 'opacity 0.5s ease'; // Smooth fade
-                        flame.style.opacity = '0'; // Force invisible
-                        flame.style.animation = 'none'; // STOP the flicker animation immediately
-                    });
+                        // 2. UI Updates
+                        document.getElementById('wish-msg').style.opacity = '1';
+                        const btn = document.getElementById('mic-btn');
+                        btn.innerText = "WISH GRANTED! 🎂";
+                        btn.disabled = true;
+                        btn.style.backgroundColor = "#555";
 
-                    // B. Show Smoke
-                    const smokes = document.querySelectorAll('.smoke');
-                    smokes.forEach(smoke => {
-                        smoke.style.opacity = '1';
-                        smoke.style.animation = 'smokeRise 1s forwards'; // Trigger smoke
-                    });
+                        // 3. TRIGGER CONFETTI (The missing part!)
+                        confetti({
+                            particleCount: 150,
+                            spread: 70,
+                            origin: { y: 0.6 },
+                            colors: ['#ff4757', '#1DB954', '#ffffff'] // Red, Green, White
+                        });
 
-                    // C. Show Success Message
-                    document.getElementById('wish-msg').style.opacity = '1';
-                    
-                    // Change button text
-                    const btn = document.getElementById('mic-btn');
-                    btn.innerText = "WISH GRANTED! 🎂";
-                    btn.disabled = true;
-                    btn.style.backgroundColor = "#555";
+                        // 4. PLAY CLAP SOUND (Optional)
+                        // If you have a clap.mp3, uncomment the next line:
+                        // new Audio('clap.mp3').play();
 
-                    // D. Cleanup / Stop Listening
-                    stream.getTracks().forEach(track => track.stop());
-                    scriptProcessor.disconnect();
-                    audioContext.close();
-                }
-            };
-        }).catch(function(err) {
-            console.error("Microphone access denied:", err);
-            alert("Microphone access needed to blow out candles! Please allow access or tap the cake.");
-            
-            // Fallback: Click cake to extinguish
-            document.querySelector('.cake').onclick = function() {
-                const flames = document.querySelectorAll('.fuego');
-                flames.forEach(f => {
-                    f.style.opacity = '0';
-                    f.style.animation = 'none';
-                });
-                document.querySelectorAll('.smoke').forEach(s => {
-                    s.style.opacity = '1';
-                    s.style.animation = 'smokeRise 1s forwards';
-                });
-                document.getElementById('wish-msg').style.opacity = '1';
-
-                // Fallback Confetti
-                confetti({
-                    particleCount: 300,
-                    spread: 120,
-                    origin: { y: 0.6 },
-                    zIndex: 99999
-                });
-            };
-        });
-    } else {
-        alert("Your browser doesn't support microphone access.");
+                        // 5. Cleanup
+                        stream.getTracks().forEach(track => track.stop());
+                        scriptProcessor.disconnect();
+                        audioContext.close();
+                    }
+                };
+            }).catch(function(err) {
+                console.error("Mic Error:", err);
+                alert("Microphone access needed! Please allow access.");
+            });
+        } else {
+            alert("Your browser doesn't support microphone access.");
+        }
     }
-}
 
 
         // TIME
         function startTime() {
-            const updateTime = () => {
-                const now = new Date();
-                const myTimeStr = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit', hour12: false });
-                const uaeTimeStr = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Dubai', hour: '2-digit', minute: '2-digit', hour12: false });
-                document.getElementById('time-my').innerText = myTimeStr;
-                document.getElementById('time-uae').innerText = uaeTimeStr;
-                const myHour = parseInt(myTimeStr.split(':')[0]);
-                const bg = document.querySelector('.bg-distance-color');
-                const locTexts = document.querySelectorAll('.loc-text');
-                if (myHour >= 6 && myHour < 11) { bg.style.background = "linear-gradient(135deg, #fce38a, #f38181)"; locTexts.forEach(el => el.style.color = "#333"); } 
-                else if (myHour >= 11 && myHour < 17) { bg.style.background = "linear-gradient(135deg, #2980B9, #6DD5FA, #FFFFFF)"; locTexts.forEach(el => el.style.color = "#fff"); } 
-                else if (myHour >= 17 && myHour < 19) { bg.style.background = "linear-gradient(135deg, #cc2b5e, #753a88)"; locTexts.forEach(el => el.style.color = "#fff"); } 
-                else { bg.style.background = "linear-gradient(135deg, #0f0c29, #302b63, #24243e)"; locTexts.forEach(el => el.style.color = "#e0e0e0"); }
-            };
-            setInterval(updateTime, 1000); updateTime();
+         const updateTime = () => {
+        const now = new Date();
+        const myTimeStr = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit', hour12: false });
+        const uaeTimeStr = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Dubai', hour: '2-digit', minute: '2-digit', hour12: false });
+        
+        document.getElementById('time-my').innerText = myTimeStr;
+        document.getElementById('time-uae').innerText = uaeTimeStr;
+
+        const myHour = parseInt(myTimeStr.split(':')[0]);
+        const bg = document.querySelector('.bg-distance-color');
+        
+        // Background changes, but TEXT COLOR lines are removed so it stays white/gray from CSS
+        if (myHour >= 6 && myHour < 11) { 
+            bg.style.background = "linear-gradient(135deg, #fce38a, #f38181)"; 
+        } 
+        else if (myHour >= 11 && myHour < 17) { 
+            bg.style.background = "linear-gradient(135deg, #2980B9, #6DD5FA, #FFFFFF)"; 
+        } 
+        else if (myHour >= 17 && myHour < 19) { 
+            bg.style.background = "linear-gradient(135deg, #cc2b5e, #753a88)"; 
+        } 
+        else { 
+            bg.style.background = "linear-gradient(135deg, #0f0c29, #302b63, #24243e)"; 
         }
+    };
+    setInterval(updateTime, 1000); 
+    updateTime();
+}
 
         // FOG (Soft & Auto-Reveal)
         function openFog() {
@@ -923,34 +1667,60 @@
         function toggleNightMode() { document.body.classList.toggle('night-mode-active'); progress.night = true; checkARG(); }
         
         function plantFlower() {
-            const garden = document.getElementById('garden');
-            const flowers = ['🌷', '🌸', '🌺', '🌹'];
-            const flower = document.createElement('div');
+        const garden = document.getElementById('garden');
+        const flowers = ['🌷', '🌸', '🌺', '🌹'];
+        const flower = document.createElement('div');
+        
+        // SECRET SUNFLOWER CHANCE (20%)
+        const isSecret = Math.random() < 0.2; 
+        flower.innerText = isSecret ? '🌻' : flowers[Math.floor(Math.random() * flowers.length)];
+        
+        flower.classList.add('flower');
+        flower.style.left = Math.random() * 90 + '%';
+        
+        flower.onclick = function(e) {
             
-            // SECRET SUNFLOWER CHANCE (20%)
-            const isSecret = Math.random() < 0.2; 
-            flower.innerText = isSecret ? '🌻' : flowers[Math.floor(Math.random() * flowers.length)];
-            
-            flower.classList.add('flower');
-            flower.style.left = Math.random() * 90 + '%';
-            flower.onclick = function(e) {
-                // If Secret Flower -> Play Audio
-                if(isSecret) {
-                    const secretAudio = document.getElementById('secret-audio');
+            // 1. Handle Secret Flower Logic
+            if(isSecret) {
+                // *** CHANGE HERE: Look for 'secret-audio1' ***
+                const secretAudio = document.getElementById('secret-audio1');
+                if(secretAudio) {
                     secretAudio.volume = 0.5;
-                    secretAudio.play();
-                    alert("You found a rare sunflower! 🌻 Listen closely...");
+                    secretAudio.play().catch(e => console.log("Audio play error", e));
                 }
+                
+                // Show popup
+                const overlay = document.getElementById('sunflower-overlay');
+                if(overlay) overlay.style.display = 'flex';
+            } 
 
-                const plusOne = document.createElement('div'); plusOne.innerText = "+1"; plusOne.classList.add('plus-one');
-                plusOne.style.left = e.clientX + 'px'; plusOne.style.top = e.clientY + 'px'; document.body.appendChild(plusOne);
-                const toast = document.getElementById('flower-toast'); toast.style.opacity = '1';
-                setTimeout(() => { toast.style.opacity = '0'; }, 1000); setTimeout(() => { plusOne.remove(); }, 1000);
-                this.remove();
-                progress.flowers++; checkARG();
-            };
-            garden.appendChild(flower);
-        }
+            // 2. Visual Effects (+1 Animation)
+            const plusOne = document.createElement('div'); 
+            plusOne.innerText = "+1"; 
+            plusOne.classList.add('plus-one');
+            plusOne.style.left = e.clientX + 'px'; 
+            plusOne.style.top = e.clientY + 'px'; 
+            document.body.appendChild(plusOne);
+            
+            const toast = document.getElementById('flower-toast'); 
+            if(toast) {
+                toast.style.opacity = '1';
+                setTimeout(() => { toast.style.opacity = '0'; }, 1000); 
+            }
+            
+            setTimeout(() => { plusOne.remove(); }, 1000);
+            
+            // 3. Remove flower
+            this.remove();
+            
+            // 4. Update Progress
+            if(typeof progress !== 'undefined') {
+                progress.flowers++; 
+                checkARG();
+            }
+        };
+        garden.appendChild(flower);
+    }
 
         // SECRET DECO SOUND
         function playSecretSound() {
@@ -963,6 +1733,7 @@
         // ALERTS
         function showAkmalAlert() { document.getElementById('custom-alert-overlay').style.display = 'flex'; }
         function closeCustomAlert() { document.getElementById('custom-alert-overlay').style.display = 'none'; }
+        function closeSecretAlert() {document.getElementById('secret-unlock-overlay').style.display = 'none';}
 
         // TYPING
         let currentTimeout; 
@@ -1045,11 +1816,20 @@
 
         // SECRET UNLOCK
         function unlockSecret() {
+            // 1. Hide the old stuff
             document.getElementById('contract-reveal').style.display = 'none';
             document.getElementById('fireworks-canvas').style.display = 'none';
-            document.getElementById('secret-section').style.display = 'flex'; 
-            document.getElementById('secret-section').scrollIntoView({ behavior: 'smooth' });
-            alert("Secret Section Unlocked! Scroll down to find it.");
+            
+            // 2. Show the Secret Section
+            const secretSec = document.getElementById('secret-section');
+            secretSec.style.display = 'flex'; 
+            secretSec.scrollIntoView({ behavior: 'smooth' });
+
+            // 3. SHOW THE CUSTOM POPUP (Instead of alert)
+            document.getElementById('secret-unlock-overlay').style.display = 'flex';
+            
+            // Optional: Play a sound effect if you have one
+            // new Audio('secret.mp3').play();
         }
 
         // MOOD LOGIC (UPDATED FOR TOOLTIPS & CENTER CONFETTI)
@@ -1064,7 +1844,11 @@
             } else {
                 resp.innerText = "I miss you more. Not long now until MY ✈️ UAE.";
             }
-        }
+        } 
+
+        
+        
+
     </script>
 </body>
 </html>
