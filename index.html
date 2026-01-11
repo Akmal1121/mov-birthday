@@ -362,7 +362,54 @@
         .quest-done .quest-checkbox { background: #1DB954; }
         .quest-active { border-left-color: #ff00de; background: rgba(255, 0, 222, 0.1); }
 
-        .moonlight-msg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 400px; text-align: center; opacity: 0; pointer-events: none; transition: opacity 0.5s; z-index: 20; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); padding: 30px; border-radius: 20px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        /* --- THE MOONLIGHT MESSAGE (FIXED) --- */
+        .moonlight-msg { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            width: 85%; 
+            max-width: 400px; 
+            text-align: center; 
+            opacity: 0; 
+            pointer-events: none; 
+            transition: opacity 0.5s ease; 
+            
+            /* CRITICAL: Must be higher than map-widget (5) and tickets (10) */
+            z-index: 100; 
+            
+            background: rgba(0, 0, 0, 0.8); /* Darker for better contrast */
+            backdrop-filter: blur(15px); 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 0 50px rgba(0,0,0,0.8); 
+        }
+
+        /* When Night Mode is ON */
+        .night-mode-active .moonlight-msg { 
+            opacity: 1; 
+            pointer-events: auto; 
+        }
+
+        /* Blur the background elements */
+        .night-mode-active .distance-content { 
+            opacity: 0.15; 
+            filter: blur(8px); 
+            pointer-events: none; 
+            transition: 0.8s; 
+        }
+
+        /* Keep the Toggle Button visible so she can turn it off */
+        .night-mode-btn { 
+            position: relative;
+            z-index: 101; /* Higher than the blur and the message */
+            background: rgba(0,0,0,0.5); 
+            border: 1px solid white; 
+            color: white; 
+            padding: 10px 25px; 
+            border-radius: 30px; 
+        }
         .night-mode-active .moonlight-msg { opacity: 1; pointer-events: auto; }
         .night-mode-btn { z-index: 5; background: rgba(0,0,0,0.5); border: 1px solid white; color: white; padding: 10px 25px; font-size: 0.9rem; cursor: pointer; border-radius: 30px; margin-top: 20px; }
 
@@ -874,14 +921,11 @@
 </section>
 
         <section id="distance-section">
-    <div class="deco" style="top: 5%; right: 5%;">🌍</div>
-    <div class="deco" style="bottom: 10%; left: 5%;">💌</div>
-
     <div class="bg-distance-color"></div>
     <div class="bg-distance-overlay"></div>
 
     <div class="distance-content">
-        <h2 data-aos="fade-down">The Distance</h2>
+        <h2 data-aos="fade-down" style="margin-bottom: 20px; z-index: 5;">The Distance</h2>
 
         <div class="map-widget" data-aos="zoom-in">
             <svg class="connection-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -914,7 +958,7 @@
                 <h3 style="text-align: left; margin-bottom: 10px; font-size: 0.9rem;">📜 Quest Log</h3>
                 <div class="quest-item quest-done"><div class="quest-checkbox">✓</div><div>2019 - 2021: The First Match</div></div>
                 <div class="quest-item quest-done"><div class="quest-checkbox">✓</div><div>2025: Second Chance Accepted</div></div>
-                <div class="quest-item quest-active"><div class="quest-checkbox">●</div><div>Mission: Survive the Distance</div></div>
+                <div class="quest-item quest-map-active"><div class="quest-checkbox"style="color: #b42ce5;">●</div><div>Mission: Survive the Distance</div></div>
                 <div class="quest-item quest-done"><div class="quest-checkbox">?</div><div>2026+ : Coming Soon</div></div>
             </div>
         </div>
@@ -938,7 +982,15 @@
             </div>
         </div>
 
-        <button class="btn-spotify night-mode-btn" onclick="toggleNightMode()">🌘 Night Mode</button>
+        <button class="btn-spotify night-mode-btn" style="margin-top: 20px;" onclick="toggleNightMode()">🌘 Night Mode</button>
+    </div>
+
+    <div class="moonlight-msg">
+        <div style="font-size: 1.3rem; margin-bottom: 25px; line-height: 1.6;">
+            "My moon follows your sun,<br>united by the same moonlight."<br><br>
+            <span style="font-size: 2.5rem;">☀️ ❤️ 🌙</span>
+        </div>
+        <button class="btn-spotify night-mode-btn" onclick="toggleNightMode()">Turn Lights On</button>
     </div>
 </section>
 
