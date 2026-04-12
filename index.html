@@ -239,18 +239,20 @@
         .candle { background-color: #7B020B; width: 12px; height: 35px; border-radius: 6px/3px; position: absolute; top: -15px; z-index: 10; box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
         .candle:before { content: ""; position: absolute; top: 0; left: 0; width: 12px; height: 6px; border-radius: 50%; background-color: #ad030f; }
         .candle:after { content: ""; position: absolute; top: -5px; left: 5px; width: 2px; height: 10px; background: black; }
-        .c1 { left: 30px; top: 10px; }
-        .c2 { left: 75px; top: 15px; }
-        .c3 { left: 115px; top: 5px; }
-        .c4 { left: 155px; top: 15px; }
-        .c5 { left: 200px; top: 10px; }
+        .c1 { left: 20px; top: 20px; }
+        .c2 { left: 53px; top: 25px; }
+        .c3 { left: 86px; top: 15px; }
+        .c4 { left: 120px; top: 25px; }
+        .c5 { left: 153px; top: 15px; }
+        .c6 { left: 186px; top: 25px; }
+        .c7 { left: 220px; top: 20px; }
         /* FLAMES */
         .fuego { position: absolute; top: -15px; left: 3px; width: 6px; height: 12px; border-radius: 50%; background: #ffcc00; box-shadow: 0 0 10px gold, 0 0 20px #ffcc00, 0 0 20px #ff0000; animation: flicker 0.5s infinite alternate; transform-origin: center bottom; opacity: 1; transition: 0.5s; }
         .fuego:before { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 30%; background: #ff0000; border-radius: 50%; opacity: 0.7; }
         @keyframes flicker { 0% { transform: scale(1) rotate(-2deg); } 100% { transform: scale(1.1) rotate(2deg); } }
         /* BLOWN OUT */
         .fuego.out { opacity: 0; transform: scale(0.1); }
-        .smoke { position: absolute; top: -25px; left: 0; width: 10px; height: 20px; background: rgba(200,200,200,0.5); border-radius: 50%; animation: smokeRise 1s forwards; opacity: 0; pointer-events: none; }
+        .smoke { position: absolute; top: -25px; left: 0; width: 10px; height: 20px; background: rgba(200,200,200,0.5); border-radius: 50%; opacity: 0; pointer-events: none; }
         @keyframes smokeRise { 0% { opacity: 0.8; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-30px) scale(2); } }
 
         /* --- OVERLAYS --- */
@@ -595,10 +597,111 @@
             to { opacity: 1; transform: translate(-50%, 0) scale(1); }
         }
 
+        /* --- TOP LEFT MENU BUTTON --- */
+        #menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 15000;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            border: 1px solid #ff4757;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        #menu-btn:hover {
+            background: #ff4757;
+            transform: scale(1.05);
+        }
+
+        /* --- FULL PAGE GALLERY TAB --- */
+        #gallery-tab {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #121212;
+            z-index: 14000;
+            overflow-y: auto; /* Allows scrolling */
+            padding: 80px 20px 40px 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .masonry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Auto adjusts columns */
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .gallery-pic {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.3s, border 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .gallery-pic:hover {
+            transform: scale(1.05);
+            border-color: #ff4757;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        /* --- LIGHTBOX (EXPANDED IMAGE) --- */
+        #lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 20000;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+
+        #lightbox-img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+            border: 3px solid white;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
         /* UTILS */
         .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 95%; max-width: 450px; }
         .gallery-img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; background: #333; transition: transform 0.3s; }
         .gallery-img:hover { transform: scale(1.05); z-index: 2; }
+
+        /* CATEGORY CARDS */
+        .cat-card { position: relative; width: 100%; height: 150px; border-radius: 10px; overflow: hidden; cursor: pointer; transition: transform 0.3s; background: #333; }
+        .cat-card:hover { transform: scale(1.05); z-index: 2; box-shadow: 0 10px 20px rgba(255, 71, 87, 0.4); }
+        .cat-bg { width: 100%; height: 100%; object-fit: cover; filter: blur(3px) brightness(0.5); transition: 0.4s; }
+        .cat-card:hover .cat-bg { filter: blur(0px) brightness(0.8); }
+        .cat-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: 900; font-size: 1.2rem; text-shadow: 0 2px 10px black, 0 0 20px black; pointer-events: none; text-align: center; width: 100%; }
 
         #garden { width: 100%; height: 150px; border-bottom: 3px solid #ff4757; position: relative; margin-top: 20px; overflow: hidden; }
         .flower { position: absolute; bottom: -50px; font-size: 3rem; animation: growUp 0.8s forwards; cursor: pointer; z-index: 5; }
@@ -844,6 +947,18 @@
 
     <div id="flower-toast">Flower Collected! 🌸</div>
 
+    <!-- GALLERY TAB OVERLAY -->
+    <div id="gallery-tab">
+        <button id="menu-btn" onclick="closeCategory()">⬅ BACK</button>
+        <h2 id="gallery-title" style="margin-bottom: 20px; color: #ff4757; font-size: 2rem;">Category</h2>
+        <div class="masonry-grid" id="masonry-grid"></div>
+    </div>
+
+    <!-- LIGHTBOX OVERLAY -->
+    <div id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Expanded Image">
+    </div>
+
     <div id="music-container">
         <div class="music-bar retracted" id="music-bar" onclick="expandMusic()">
     
@@ -893,8 +1008,8 @@
     <div class="deco" style="bottom: 15%; right: 10%;">🎈</div>
     
     <div data-aos="fade-down" style="font-size: 3rem;">🎉</div>
-    <h1 data-aos="zoom-in" style="margin-bottom: 5px;">Happy Birthday</h1>
-    <h1 style="font-size: 3rem; color: #e443a4;" data-aos="zoom-in" data-aos-delay="300">ALYA</h1>
+    <h1 data-aos="zoom-in" style="margin-bottom: 5px;">HAPPY BIRTHDAY</h1>
+    <h1 id="alya-text" style="font-size: 3rem; color: #e443a4;" data-aos="zoom-in" data-aos-delay="300">ALYA</h1>
     
     <div class="cake-wrapper">
         <div class="cake">
@@ -912,12 +1027,14 @@
             <div class="candle c3"><div class="fuego"></div><div class="smoke"></div></div>
             <div class="candle c4"><div class="fuego"></div><div class="smoke"></div></div>
             <div class="candle c5"><div class="fuego"></div><div class="smoke"></div></div>
+            <div class="candle c6"><div class="fuego"></div><div class="smoke"></div></div>
+            <div class="candle c7"><div class="fuego"></div><div class="smoke"></div></div>
         </div>
     </div>
 
     <p id="candle-instruction" style="font-size: 0.9rem; opacity: 0.8; margin-top: 130px;">(Blow into mic to extinguish!)</p>
     <button id="mic-btn" class="btn-spotify" style="margin-top: 20px;" onclick="startMicrophone(); playCakeMusic()">🎤 START BLOWING</button>
-    <h2 id="wish-msg" style="color: #1DB954; opacity: 0; transition: 1s; margin-top: 20px;">WISH GRANTED! 🥳</h2>
+    <h2 id="wish-msg" style="color: #1DB954; opacity: 0; transition: 1s; margin-top: 20px;">HAPPY BIRTHDAYYYY! 🥳</h2>
 </section>
 
         <section id="distance-section">
@@ -1053,10 +1170,22 @@
             <div class="deco" style="top: 10%; left: 5%;">🖼️</div>
              <h1 data-aos="fade-down">Our Memories</h1>
              <div class="gallery-grid" data-aos="fade-up" style="margin-top: 20px;">
-                <img src="https://placehold.co/200x200/pink/white?text=Us+1" class="gallery-img">
-                <img src="https://placehold.co/200x200/pink/white?text=Us+2" class="gallery-img">
-                <img src="https://placehold.co/200x200/pink/white?text=Us+3" class="gallery-img">
-                <img src="https://placehold.co/200x200/pink/white?text=Silly" class="gallery-img">
+                <div class="cat-card" onclick="openCategory('us')">
+                    <img id="cat-img-us" src="" class="cat-bg">
+                    <div class="cat-label">Just Us ❤️</div>
+                </div>
+                <div class="cat-card" onclick="openCategory('trips')">
+                    <img id="cat-img-trips" src="" class="cat-bg">
+                    <div class="cat-label">Trips ✈️</div>
+                </div>
+                <div class="cat-card" onclick="openCategory('dates')">
+                    <img id="cat-img-dates" src="" class="cat-bg">
+                    <div class="cat-label">Dates 🍽️</div>
+                </div>
+                <div class="cat-card" onclick="openCategory('silly')">
+                    <img id="cat-img-silly" src="" class="cat-bg">
+                    <div class="cat-label">Silly 🤪</div>
+                </div>
             </div>
         </section>
 
@@ -1580,12 +1709,16 @@
         // --- NEW: MICROPHONE BLOW DETECTION ---
         function startMicrophone() {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            // Initialize AudioContext synchronously during the click event to avoid it being "suspended"
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const audioContext = new AudioContext();
+
             navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                const audioContext = new AudioContext();
                 const analyser = audioContext.createAnalyser();
                 const microphone = audioContext.createMediaStreamSource(stream);
                 const scriptProcessor = audioContext.createScriptProcessor(2048, 1, 1);
+                
+                let blowDetected = false;
 
                 analyser.smoothingTimeConstant = 0.8;
                 analyser.fftSize = 1024;
@@ -1605,11 +1738,12 @@
                     const average = values / array.length;
 
                     // THRESHOLD MET (BLOW DETECTED)
-                    if (average > 40) {
+                    if (average > 30 && !blowDetected) {
+                        blowDetected = true;
                         
                         // 1. Visuals: Extinguish Flames
                         document.querySelectorAll('.fuego').forEach(f => {
-                            f.style.opacity = '0';
+                            f.classList.add('out');
                             f.style.animation = 'none';
                         });
                         document.querySelectorAll('.smoke').forEach(s => {
@@ -1624,17 +1758,27 @@
                         btn.disabled = true;
                         btn.style.backgroundColor = "#555";
 
+                        // Make ALYA text glow!
+                        document.getElementById('alya-text').classList.add('glow-text');
+
                         // 3. TRIGGER CONFETTI (The missing part!)
                         confetti({
                             particleCount: 150,
                             spread: 70,
                             origin: { y: 0.6 },
-                            colors: ['#ff4757', '#1DB954', '#ffffff'] // Red, Green, White
+                            colors: ['#ff4757', '#1DB954', '#ffffff'], // Red, Green, White
+                            zIndex: 15000
                         });
 
-                        // 4. PLAY CLAP SOUND (Optional)
-                        // If you have a clap.mp3, uncomment the next line:
-                        // new Audio('clap.mp3').play();
+                        // 4. PLAY SOUNDS (Whistle & Custom Voice)
+                        const whistle = document.getElementById('whistle-audio');
+                        if (whistle) whistle.play();
+                        
+                        // Play your voice half a second after the whistle
+                        setTimeout(() => {
+                            const customVoice = document.getElementById('custom-voice-audio');
+                            if (customVoice) customVoice.play();
+                        }, 500);
 
                         // 5. Cleanup
                         stream.getTracks().forEach(track => track.stop());
@@ -1897,6 +2041,81 @@
                 resp.innerText = "I miss you more. Not long now until MY ✈️ UAE.";
             }
         } 
+
+        // --- GALLERY & LIGHTBOX LOGIC ---
+        
+        // Replace these placeholder links with your actual images!
+        const galleryData = {
+            us: [
+                "https://placehold.co/400x600/pink/white?text=Us+1",
+                "https://placehold.co/500x500/pink/white?text=Us+2",
+                "https://placehold.co/600x400/pink/white?text=Us+3",
+                "https://placehold.co/400x500/pink/white?text=Us+4",
+                "https://placehold.co/500x400/pink/white?text=Us+5",
+                "https://placehold.co/400x600/pink/white?text=Us+6",
+                "https://placehold.co/600x600/pink/white?text=Us+7",
+                "https://placehold.co/500x500/pink/white?text=Us+8"
+            ],
+            trips: [
+                "https://placehold.co/400x400/pink/white?text=Trip+1",
+                "https://placehold.co/600x800/pink/white?text=Trip+2",
+                "https://placehold.co/500x300/pink/white?text=Trip+3",
+                "https://placehold.co/400x500/pink/white?text=Trip+4",
+                "https://placehold.co/500x600/pink/white?text=Trip+5",
+                "https://placehold.co/600x400/pink/white?text=Trip+6",
+                "https://placehold.co/400x400/pink/white?text=Trip+7",
+                "https://placehold.co/500x500/pink/white?text=Trip+8"
+            ],
+            dates: [
+                "https://placehold.co/600x400/pink/white?text=Date+1",
+                "https://placehold.co/400x600/pink/white?text=Date+2",
+                "https://placehold.co/500x500/pink/white?text=Date+3",
+                "https://placehold.co/400x400/pink/white?text=Date+4",
+                "https://placehold.co/600x500/pink/white?text=Date+5",
+                "https://placehold.co/500x600/pink/white?text=Date+6",
+                "https://placehold.co/400x500/pink/white?text=Date+7",
+                "https://placehold.co/600x600/pink/white?text=Date+8"
+            ],
+            silly: [
+                "https://placehold.co/400x400/pink/white?text=Silly+1",
+                "https://placehold.co/300x500/pink/white?text=Silly+2",
+                "https://placehold.co/500x500/pink/white?text=Silly+3",
+                "https://placehold.co/400x400/pink/white?text=Silly+4",
+                "https://placehold.co/600x400/pink/white?text=Silly+5",
+                "https://placehold.co/500x600/pink/white?text=Silly+6",
+                "https://placehold.co/400x500/pink/white?text=Silly+7",
+                "https://placehold.co/600x600/pink/white?text=Silly+8"
+            ]
+        };
+
+        const categoryTitles = { us: "Just Us ❤️", trips: "Our Adventures ✈️", dates: "Cute Dates 🍽️", silly: "Silly Moments 🤪" };
+
+        // Automatically set the category thumbnail to the FIRST image of each array!
+        document.getElementById('cat-img-us').src = galleryData.us[0];
+        document.getElementById('cat-img-trips').src = galleryData.trips[0];
+        document.getElementById('cat-img-dates').src = galleryData.dates[0];
+        document.getElementById('cat-img-silly').src = galleryData.silly[0];
+
+        function openCategory(cat) {
+            const grid = document.getElementById('masonry-grid');
+            grid.innerHTML = ''; // Clear old images
+            document.getElementById('gallery-title').innerText = categoryTitles[cat];
+            
+            galleryData[cat].forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = 'gallery-pic';
+                img.onclick = () => openLightbox(src); // Clicking image opens lightbox
+                grid.appendChild(img);
+            });
+            
+            document.getElementById('gallery-tab').style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Stop background scrolling
+        }
+
+        function closeCategory() { document.getElementById('gallery-tab').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').style.display = 'flex'; }
+        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
 
         
         
