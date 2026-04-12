@@ -845,7 +845,7 @@
         }
 
         .custom-alert-box { background: #222; border: 1px solid #1DB954; padding: 20px; border-radius: 15px; text-align: center; width: 80%; max-width: 300px; color: white; box-shadow: 0 0 30px rgba(29, 185, 84, 0.4); }
-        .achievement { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: #222; border: 2px solid white; color: white; padding: 15px; width: 90%; max-width: 350px; display: flex; align-items: center; gap: 15px; border-radius: 10px; transition: bottom 0.5s; z-index: 12000; font-family: 'Press Start 2P', cursive; font-size: 0.6rem; text-align: left; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+        .achievement { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: #222; border: 2px solid white; color: white; padding: 15px; width: 90%; max-width: 350px; display: flex; align-items: center; gap: 15px; border-radius: 10px; transition: bottom 0.5s; z-index: 21000; font-family: 'Press Start 2P', cursive; font-size: 0.6rem; text-align: left; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
         .ach-icon { min-width: 40px; height: 40px; background: #1DB954; border-radius: 5px; }
         .bg-dark { background: radial-gradient(circle at center, #2a2a2a 0%, #121212 100%); }
         .bg-pink { background: radial-gradient(circle at center, #3a1a25 0%, #121212 100%); }
@@ -869,6 +869,40 @@
             color: white;
             transform: scale(1.2);
         }
+
+        /* --- ACHIEVEMENT UI --- */
+        #ach-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(24, 24, 24, 0.95);
+            border: 2px solid #1DB954;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 9000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transition: 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        #ach-btn:hover { transform: scale(1.1); background: #1DB954; }
+        
+        #ach-panel {
+            position: fixed; bottom: 150px; right: 20px; background: rgba(20,20,20,0.95);
+            border: 1px solid #333; padding: 20px; border-radius: 15px; width: 250px;
+            z-index: 9000; backdrop-filter: blur(10px); display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+        }
+        #ach-panel h3 { margin-top: 0; color: #1DB954; font-size: 1.2rem; border-bottom: 1px solid #444; padding-bottom: 10px; }
+        .ach-list { display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
+        .ach-row { display: flex; gap: 10px; align-items: center; font-size: 0.8rem; text-align: left; }
+        .ach-row span { font-size: 1.2rem; min-width: 25px; text-align: center; }
+        .ach-row b { color: #fff; font-size: 0.9rem; }
+        .ach-row div p { margin: 2px 0 0 0; color: #aaa; font-size: 0.7rem; }
 
     </style>
 </head>
@@ -1000,6 +1034,19 @@
     <audio id="secret-sound"><source src="secret-sound.mp3" type="audio/mpeg"></audio>
     <audio id="secret-audio"><source src="secret.mp3" type="audio/mpeg"></audio>
     <audio id="secret-audio1"><source src="secret1.mp3" type="audio/mpeg"> </audio>
+
+    <!-- ACHIEVEMENT BUTTON & PANEL -->
+    <div id="ach-btn" onclick="toggleAchPanel()">🏆</div>
+    <div id="ach-panel">
+        <h3>Trophies 🏆</h3>
+        <div class="ach-list">
+            <div class="ach-row"><span id="ach-check-arg">🔒</span> <div><b>The Observer</b><p>Discover the hidden truth.</p></div></div>
+            <div class="ach-row"><span id="ach-check-contract">🔒</span> <div><b>The Promise</b><p>Sign the eternal agreement.</p></div></div>
+            <div class="ach-row"><span id="ach-check-plushies">🔒</span> <div><b>Plushie Hunter</b><p>Find all hidden plushies.</p></div></div>
+            <div class="ach-row"><span id="ach-check-memories">🔒</span> <div><b>Memory Lane</b><p>View all gallery categories.</p></div></div>
+            <div class="ach-row"><span id="ach-check-scrolled">🔒</span> <div><b>Journey's End</b><p>Reach the bottom of the page.</p></div></div>
+        </div>
+    </div>
 
     <div id="main-site" style="display: block;">
 
@@ -1213,7 +1260,7 @@
             <audio id="voice-msg"><source src="voice.mp3" type="audio/mpeg"></audio>
         </section>
 
-        <section style="background: black;">
+        <section id="finale-section" style="background: black;">
              <div class="deco" style="top: 20%; left: 20%;">❔</div>
             <div class="deco" style="bottom: 20%; right: 20%;">💖</div>
             <div class="deco" id="secret-deco" style="bottom: 30%; " onclick="playSecretSound()">🧸</div>
@@ -1239,10 +1286,10 @@
     </div>
 
     <div id="achievement" class="achievement">
-        <div class="ach-icon"></div>
+        <div class="ach-icon" style="display: flex; justify-content: center; align-items: center; font-size: 1.5rem;">🏆</div>
         <div>
-            <div style="color: #ffff00; font-size: 0.6rem;">SECRET UNLOCKED</div>
-            <div style="font-size: 0.7rem;">"It was never a website.<br>It was a promise."</div>
+            <div id="ach-toast-title" style="color: #ffff00; font-size: 0.6rem;">ACHIEVEMENT UNLOCKED</div>
+            <div id="ach-toast-desc" style="font-size: 0.7rem; margin-top: 5px;"></div>
         </div>
     </div>
 
@@ -1596,17 +1643,47 @@
         ];
 
         let progress = { flowers: 0, fog: false, night: false, reasons: 0 };
-        let achievementUnlocked = false;
         let scratchedPixels = 0;
         let isSigned = false; // For contract
+        let plushiesFound = { bear: false, sunflower: false };
+        let categoriesOpened = new Set();
+
+        // The Core Achievement Data
+        let achievements = {
+            arg: { name: "The Observer", desc: "Discover the hidden truth.", done: false },
+            contract: { name: "The Promise", desc: "Sign the eternal agreement.", done: false },
+            plushies: { name: "Plushie Hunter", desc: "Find the hidden bear & sunflower.", done: false },
+            memories: { name: "Memory Lane", desc: "View all gallery categories.", done: false },
+            scrolled: { name: "Journey's End", desc: "Reach the bottom of the page.", done: false }
+        };
+
+        function toggleAchPanel() {
+            const panel = document.getElementById('ach-panel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function unlockAch(id) {
+            if (achievements[id].done) return;
+            achievements[id].done = true;
+            
+            // Update UI list
+            document.getElementById('ach-check-' + id).innerText = "✅";
+            
+            // Update and show Toast
+            const achToast = document.getElementById('achievement');
+            document.getElementById('ach-toast-desc').innerHTML = `<strong>${achievements[id].name}</strong><br>${achievements[id].desc}`;
+            
+            achToast.style.bottom = "20px";
+            const sound = document.getElementById('achievement-audio');
+            if(sound) { sound.volume = 0.5; sound.play().catch(e => console.log(e)); }
+
+            setTimeout(() => { achToast.style.bottom = "-100px"; }, 6000);
+        }
 
         function checkARG() {
-            if(achievementUnlocked) return;
-            if(progress.flowers >= 5 && progress.reasons >= 10 && progress.fog && progress.night) {
-                achievementUnlocked = true;
-                const ach = document.getElementById('achievement');
-                ach.style.bottom = "20px";
-                setTimeout(() => { ach.style.bottom = "-100px"; }, 5000);
+            if(achievements['arg'].done) return;
+            if(progress.flowers >= 1 && progress.reasons >= 3 && progress.fog && progress.night) {
+                unlockAch('arg');
             }
         }
 
@@ -1631,6 +1708,16 @@
         document.addEventListener("DOMContentLoaded", () => {
             const audio = document.getElementById('bg-music');
             audio.volume = 0.05; 
+
+            // Observer for reaching the bottom (Journey's End achievement)
+            const scrollObserver = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    unlockAch('scrolled');
+                }
+            }, { threshold: 0.5 });
+            
+            const finaleSec = document.getElementById('finale-section');
+            if (finaleSec) scrollObserver.observe(finaleSec);
         });
 
         function expandMusic() {
@@ -1862,6 +1949,12 @@
         // UTILS
         function toggleNightMode() { document.body.classList.toggle('night-mode-active'); progress.night = true; checkARG(); }
         
+        function checkPlushies() {
+            if (plushiesFound.bear && plushiesFound.sunflower) {
+                unlockAch('plushies');
+            }
+        }
+
         function plantFlower() {
         const garden = document.getElementById('garden');
         const flowers = ['🌷', '🌸', '🌺', '🌹'];
@@ -1888,6 +1981,9 @@
                 // Show popup
                 const overlay = document.getElementById('sunflower-overlay');
                 if(overlay) overlay.style.display = 'flex';
+                
+                plushiesFound.sunflower = true;
+                checkPlushies();
             } 
 
             // 2. Visual Effects (+1 Animation)
@@ -1924,6 +2020,8 @@
              secretSound.volume = 0.5;
              secretSound.play();
              alert("You found the secret teddy bear! 🧸");
+             plushiesFound.bear = true;
+             checkPlushies();
         }
         
         // ALERTS
@@ -2003,6 +2101,7 @@
                 btn.style.background = "#ff4757";
                 btn.style.transform = "scale(1.1)";
                 isSigned = true;
+                unlockAch('contract');
 
             } else {
                 // Unlock Secret
@@ -2101,6 +2200,9 @@
             grid.innerHTML = ''; // Clear old images
             document.getElementById('gallery-title').innerText = categoryTitles[cat];
             
+            categoriesOpened.add(cat);
+            if(categoriesOpened.size === 4) unlockAch('memories');
+
             galleryData[cat].forEach(src => {
                 const img = document.createElement('img');
                 img.src = src;
