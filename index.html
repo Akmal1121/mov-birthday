@@ -983,6 +983,17 @@
             transition: transform 0.5s 0.5s, height 0.5s 0.5s;
         }
 
+        /* --- LETTER SCROLLBAR --- */
+        .envelope-letter p {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-bottom: 10px !important;
+        }
+        .envelope-letter p::-webkit-scrollbar { width: 4px; }
+        .envelope-letter p::-webkit-scrollbar-thumb { background: #f06292; border-radius: 4px; }
+        .envelope-letter p::-webkit-scrollbar-track { background: transparent; }
+
         /* --- WEATHER --- */
         #weather-container {
             position: absolute;
@@ -1409,7 +1420,9 @@
                 <div class="envelope-letter">
                     <h3 style="color: #ff4757; font-family: 'Sacramento', cursive; margin:0 0 10px 0; font-size: 1.8rem; border-bottom: 1px dashed #ccc; padding-bottom: 5px; text-align: center;">My Dearest Alya,</h3>
                     <p style="font-family: 'Courier Prime', monospace; color: #333; font-size: 0.85rem; line-height: 1.5; margin: 0; padding-bottom: 10px;">
-                        Thank you for being the most amazing person in my life. Every day, every call, and every game we play makes the distance feel a little shorter. I can't wait until Player 1 and Player 2 are finally in the same room. Destiny brought us back together for a reason. Here is to our future!
+                      In Chinese, they call what we have 缘分 (Yuánfèn), it is a fate that brings people back together against all odds. It’s said an invisible red thread connects those destined to meet. It may stretch across 6,000km or tangle over time, but it never breaks.
+Honestly, I never thought a year like 2025 would happen for us, but I’m so glad it did. Being this far apart is the hardest thing I’ve ever had to do, but every call and every game we play makes it feel like you’re right here. I know I’m not always the best with words, but I need you to know that you’re my favorite person. Like the Sun and the Moon, we might be on opposite sides right now, but I’m counting down every second until we’re finally in the same room again.
+Happy Birthday, Alya.
                     </p>
                     <div style="text-align: right; color: #1DB954; font-weight: bold; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; margin-top: auto;">- Akmal</div>
                 </div>
