@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For Alya ❤️</title>
+    
+    <!-- Link Preview Meta Tags -->
+    <meta property="og:title" content="For Alya ❤️">
+    <meta property="og:description" content="A special journey, just for us. Player 1 & Player 2.">
+    <meta property="og:image" content="https://placehold.co/600x400/1DB954/white?text=Our+Journey"> <!-- Replace with a nice cover photo URL -->
+    <meta property="theme-color" content="#1DB954">
+
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧸</text></svg>">    
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -256,7 +263,7 @@
         @keyframes smokeRise { 0% { opacity: 0.8; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-30px) scale(2); } }
 
         /* --- OVERLAYS --- */
-        #login-screen, #pearl-overlay, #fog-modal, #contract-reveal, #custom-alert-overlay {
+        #boot-screen, #pearl-overlay, #fog-modal, #contract-reveal, #custom-alert-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 10000; transition: opacity 0.5s; background: #000; 
@@ -356,7 +363,8 @@
         .ticket-flight { display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 900; margin: 5px 0; }
         .ticket-sticker { position: absolute; top: 5px; right: 10px; width: 35px; height: 35px; opacity: 0.8; }
 
-        .quest-container { width: 95%; max-width: 450px; /* WIDER */ z-index: 2; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px; margin-top: 10px; }
+        .quest-container { width: 95%; max-width: 450px; z-index: 2; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px; margin-top: 10px; cursor: pointer; transition: 0.3s; border: 1px solid transparent; }
+        .quest-container:hover { border-color: rgba(29, 185, 84, 0.5); box-shadow: 0 5px 15px rgba(0,0,0,0.5); transform: translateY(-2px); }
         .quest-item { background: rgba(0,0,0,0.5); padding: 10px; margin: 5px 0; border-radius: 8px; border-left: 3px solid #555; text-align: left; display: flex; align-items: center; font-size: 0.85rem; }
         .quest-item:hover { border-left-color: #1DB954; }
         .quest-checkbox { min-width: 20px; height: 20px; border: 2px solid #1DB954; border-radius: 50%; margin-right: 10px; display: flex; justify-content: center; align-items: center; color: black; font-weight: bold; font-size: 0.7rem; }
@@ -845,7 +853,7 @@
         }
 
         .custom-alert-box { background: #222; border: 1px solid #1DB954; padding: 20px; border-radius: 15px; text-align: center; width: 80%; max-width: 300px; color: white; box-shadow: 0 0 30px rgba(29, 185, 84, 0.4); }
-        .achievement { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: #222; border: 2px solid white; color: white; padding: 15px; width: 90%; max-width: 350px; display: flex; align-items: center; gap: 15px; border-radius: 10px; transition: bottom 0.5s; z-index: 21000; font-family: 'Press Start 2P', cursive; font-size: 0.6rem; text-align: left; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+        .achievement { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: #222; border: 2px solid white; color: white; padding: 15px; width: 90%; max-width: 350px; display: flex; align-items: center; gap: 15px; border-radius: 10px; transition: bottom 0.5s; z-index: 12000; font-family: 'Press Start 2P', cursive; font-size: 0.6rem; text-align: left; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
         .ach-icon { min-width: 40px; height: 40px; background: #1DB954; border-radius: 5px; }
         .bg-dark { background: radial-gradient(circle at center, #2a2a2a 0%, #121212 100%); }
         .bg-pink { background: radial-gradient(circle at center, #3a1a25 0%, #121212 100%); }
@@ -904,24 +912,124 @@
         .ach-row b { color: #fff; font-size: 0.9rem; }
         .ach-row div p { margin: 2px 0 0 0; color: #aaa; font-size: 0.7rem; }
 
+        /* --- ENVELOPE --- */
+        .envelope-container {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            margin: 40px auto;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #f48fb1;
+            border-radius: 5px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            z-index: 1;
+        }
+        .envelope-front {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid #f8a5c2;
+            border-right: 150px solid #f8a5c2;
+            border-bottom: 100px solid #fbc5d8;
+            border-top: 100px solid transparent;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #f06292;
+            border-bottom: 100px solid transparent;
+            z-index: 4;
+            transform-origin: top;
+            transition: transform 0.5s 0.5s, z-index 0s 0.5s;
+        }
+        .envelope-letter {
+            position: absolute;
+            bottom: 10px;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            background: white;
+            z-index: 2;
+            transition: transform 0.5s, height 0.5s;
+            padding: 20px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .envelope-container.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+            transition: transform 0.5s, z-index 0s 0s;
+        }
+        .envelope-container.open .envelope-letter {
+            transform: translateY(-180px);
+            height: 380px;
+            transition: transform 0.5s 0.5s, height 0.5s 0.5s;
+        }
+
+        /* --- WEATHER --- */
+        #weather-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1; overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            width: 3px; height: 3px; background: white; border-radius: 50%;
+            opacity: 0.8; animation: twinkle linear infinite;
+        }
+        @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+        .cloud {
+            position: absolute;
+            width: 120px; height: 40px; background: white; border-radius: 50px;
+            opacity: 0.5; animation: drift linear infinite;
+        }
+        .cloud::before {
+            content: ''; position: absolute; top: -20px; left: 20px;
+            width: 50px; height: 50px; background: white; border-radius: 50%;
+        }
+        .cloud::after {
+            content: ''; position: absolute; top: -15px; right: 20px;
+            width: 40px; height: 40px; background: white; border-radius: 50%;
+        }
+        @keyframes drift { from { margin-left: -20vw; } to { margin-left: 100vw; } }
+        .drop {
+            position: absolute;
+            width: 2px; height: 15px; background: rgba(255,255,255,0.5);
+            animation: fall linear infinite;
+        }
+        @keyframes fall { to { transform: translateY(100vh); } }
+
     </style>
 </head>
 <body onload="startTime()">
     
-  <div id="login-screen"style="display: none;">
-        <h2 style="margin-bottom: 10px;">Hi, Alya</h2>
-        <div style="font-size: 3rem; margin-bottom: 20px;">👤</div>
-        <p style="font-size: 0.8rem; margin-bottom: 10px; color: #777;">Your Important Day (DDMMYYYY)</p>
-        <input type="password" id="passcode" class="login-input" placeholder="********">
-        <button class="btn-spotify" onclick="attemptLogin()">LOGIN</button>
-        <p id="login-error" style="color: #ff4757; margin-top: 10px; display: none;">Wrong password!</p>
+    <div id="boot-screen">
+        <div id="boot-text" style="color: #1DB954; font-family: 'Courier Prime', monospace; font-size: 1.2rem; text-align: left; width: 80%; max-width: 400px; min-height: 150px;"></div>
+        <button id="start-boot-btn" class="btn-spotify" onclick="initBoot()">START SYSTEM</button>
     </div> 
     
     <div id="pearl-overlay"style="display: none;">
-        <h1 style="color: #ff4757; background: black; padding: 5px 20px;">⚠️ SECURITY ALERT ⚠️</h1>
         <img src="https://placekitten.com/300/300" class="pearl-img" alt="Pearl"> 
-        <h2 id="pearl-status" style="margin-top: 20px;">CHECKING URL SAFETY...</h2>
-        <p id="pearl-desc" style="color: #bbb;">Pearl is making sure no weird sites open for Mom.</p>
+        <h2 id="pearl-status" style="margin-top: 20px; color: #1DB954; text-align: center;">Pearl is preparing surprises...</h2>
+        <p id="pearl-desc" style="color: #bbb; text-align: center; max-width: 80%;">She's making sure everything is perfect for your big day.</p>
+        <div id="pearl-countdown" style="font-size: 2.5rem; font-family: 'Courier Prime', monospace; color: #ff4757; margin-top: 20px; font-weight: bold;">Loading...</div>
     </div>
 
     <div id="custom-alert-overlay">
@@ -1050,7 +1158,7 @@
 
     <div id="main-site" style="display: block;">
 
-        <section class="bg-cake" id="cake-section">
+        <section class="bg-cake" id="cake-section" data-track="cake">
     <div class="deco" style="top: 10%; left: 5%;">✨</div>
     <div class="deco" style="bottom: 15%; right: 10%;">🎈</div>
     
@@ -1084,9 +1192,10 @@
     <h2 id="wish-msg" style="color: #1DB954; opacity: 0; transition: 1s; margin-top: 20px;">HAPPY BIRTHDAYYYY! 🥳</h2>
 </section>
 
-        <section id="distance-section">
+        <section id="distance-section" data-track="0">
     <div class="bg-distance-color"></div>
     <div class="bg-distance-overlay"></div>
+    <div id="weather-container"></div>
 
     <div class="distance-content">
         <h2 data-aos="fade-down" style="margin-bottom: 20px; z-index: 5;">The Distance</h2>
@@ -1118,12 +1227,21 @@
                 </div>
             </div>
 
-            <div class="quest-container">
-                <h3 style="text-align: left; margin-bottom: 10px; font-size: 0.9rem;">📜 Quest Log</h3>
-                <div class="quest-item quest-done"><div class="quest-checkbox">✓</div><div>2019 - 2021: The First Match</div></div>
-                <div class="quest-item quest-done"><div class="quest-checkbox">✓</div><div>2025: Second Chance Accepted</div></div>
-                <div class="quest-item quest-map-active"><div class="quest-checkbox"style="color: #b42ce5;">●</div><div>Mission: Survive the Distance</div></div>
-                <div class="quest-item quest-done"><div class="quest-checkbox">?</div><div>2026+ : Coming Soon</div></div>
+            <div class="quest-container" onclick="toggleQuestLog()">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3 style="margin: 0; font-size: 0.9rem;">📜 Current Quest</h3>
+                    <span id="quest-toggle-icon" style="font-size: 0.7rem; color: #1DB954; font-weight: bold;">▼ VIEW TIMELINE</span>
+                </div>
+                
+                <div class="quest-item quest-map-active" style="border-left-color: #b42ce5; background: rgba(180, 44, 229, 0.1);">
+                    <div class="quest-checkbox" style="color: #b42ce5; border-color: #b42ce5;">●</div><div style="font-weight: bold; color: white;">Mission: Survive the Distance</div>
+                </div>
+
+                <div id="quest-timeline" style="display: none; margin-top: 15px; border-top: 1px dashed #555; padding-top: 15px;">
+                    <div class="quest-item quest-done" style="opacity: 0.7;"><div class="quest-checkbox">✓</div><div>2019 - 2021: The First Match</div></div>
+                    <div class="quest-item quest-done" style="opacity: 0.7;"><div class="quest-checkbox">✓</div><div>2025: Second Chance Accepted</div></div>
+                    <div class="quest-item quest-done" style="opacity: 0.5;"><div class="quest-checkbox" style="border-color: #888; color: #888;">?</div><div style="color: #888;">2026+ : Coming Soon</div></div>
+                </div>
             </div>
         </div>
 
@@ -1158,7 +1276,7 @@
     </div>
 </section>
 
-        <section class="bg-dark">
+        <section class="bg-dark" data-track="1">
              <div class="deco" style="top: 10%; left: 10%;">🎧</div>
             <div class="deco" style="bottom: 10%; right: 10%;">🎵</div>
 
@@ -1185,7 +1303,7 @@
             </div>
         </section>
 
-        <section class="bg-dark">
+        <section class="bg-dark" data-track="2">
             <div class="deco" style="top: 5%; right: 15%;">📸</div>
             <h1 data-aos="fade-right">Daily Dose</h1>
             <div class="dose-box" style="position: relative; z-index: 5;">
@@ -1213,7 +1331,7 @@
             <button class="btn-spotify" onclick="openFog()" style="margin-top: 25px;">🌫️ FOGGY WINDOW</button>
         </section>
 
-        <section class="bg-pink">
+        <section class="bg-pink" data-track="3">
             <div class="deco" style="top: 10%; left: 5%;">🖼️</div>
              <h1 data-aos="fade-down">Our Memories</h1>
              <div class="gallery-grid" data-aos="fade-up" style="margin-top: 20px;">
@@ -1236,7 +1354,7 @@
             </div>
         </section>
 
-        <section class="bg-pink">
+        <section class="bg-pink" data-track="4">
              <div class="deco" style="top: 15%; left: 5%;">🦋</div>
             <div class="deco" style="bottom: 20%; right: 5%;">🐝</div>
 
@@ -1246,7 +1364,7 @@
             <div id="garden"></div>
         </section>
 
-        <section style="background: radial-gradient(circle, #2c3e50 0%, #000000 100%);">
+        <section style="background: radial-gradient(circle, #2c3e50 0%, #000000 100%);" data-track="0">
              <div class="deco" style="top: 10%; right: 10%;">📡</div>
             <div class="deco" style="bottom: 10%; left: 10%;">💫</div>
 
@@ -1260,7 +1378,7 @@
             <audio id="voice-msg"><source src="voice.mp3" type="audio/mpeg"></audio>
         </section>
 
-        <section id="finale-section" style="background: black;">
+        <section id="finale-section" style="background: black;" data-track="0">
              <div class="deco" style="top: 20%; left: 20%;">❔</div>
             <div class="deco" style="bottom: 20%; right: 20%;">💖</div>
             <div class="deco" id="secret-deco" style="bottom: 30%; " onclick="playSecretSound()">🧸</div>
@@ -1273,14 +1391,29 @@
             </div>
         </section>
 
-        <section id="secret-section">
+        <section id="secret-section" data-track="1">
             <h1 style="color: #1DB954;">Secret Unlocked 🔓</h1>
             <p>You found the hidden part!</p>
             <p style="font-size: 0.9rem; opacity: 0.8;">Here is your special Wrapped Video:</p>
             <div style="width: 95%; max-width: 450px; height: 280px; background: black; border-radius: 12px; margin: 30px auto; overflow: hidden; display: flex; justify-content: center; align-items: center; border: 2px solid #333;">
                 <iframe width="100%" height="100%" src="https://www.youtube.com/embed/YOUR_VIDEO_ID" frameborder="0" allowfullscreen style="border-radius: 12px;"></iframe>
             </div>
-            <p style="margin-top: 30px;">(P.S. There might be more hidden in the fog...)</p>
+            
+            <h3 style="margin-top: 20px; color: #ff4757; z-index: 10;">A Letter for You 💌</h3>
+            <p style="font-size: 0.8rem; color: #888; z-index: 10; margin-bottom: 10px;">(Tap the envelope to open)</p>
+            
+            <div class="envelope-container" onclick="this.classList.toggle('open')">
+                <div class="envelope"></div>
+                <div class="envelope-flap"></div>
+                <div class="envelope-front"></div>
+                <div class="envelope-letter">
+                    <h3 style="color: #ff4757; font-family: 'Sacramento', cursive; margin:0 0 10px 0; font-size: 1.8rem; border-bottom: 1px dashed #ccc; padding-bottom: 5px; text-align: center;">My Dearest Alya,</h3>
+                    <p style="font-family: 'Courier Prime', monospace; color: #333; font-size: 0.85rem; line-height: 1.5; margin: 0; padding-bottom: 10px;">
+                        Thank you for being the most amazing person in my life. Every day, every call, and every game we play makes the distance feel a little shorter. I can't wait until Player 1 and Player 2 are finally in the same room. Destiny brought us back together for a reason. Here is to our future!
+                    </p>
+                    <div style="text-align: right; color: #1DB954; font-weight: bold; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; margin-top: auto;">- Akmal</div>
+                </div>
+            </div>
         </section>
 
     </div>
@@ -1390,37 +1523,71 @@
             // if (cakeSection) { musicObserver.observe(cakeSection); }
 
 
-        /* --- UPDATED LOGIN FUNCTION --- */
-        function attemptLogin() {
-            // Check password
-            if(document.getElementById('passcode').value === '15042005') {
-                
-                // Hide Login
-                document.getElementById('login-screen').style.display = 'none';
-                
-                // Show Security Check (Pearl)
-                document.getElementById('pearl-overlay').style.display = 'flex';
-                
+        /* --- BOOT SEQUENCE & PEARL LOADING --- */
+        function initBoot() {
+            document.getElementById('start-boot-btn').style.display = 'none';
+            const bootText = document.getElementById('boot-text');
+            
+            const msgs = [
+                "hey alya. . .",
+                "it looks like today is your big day. . .",
+                "checking the time. . ."
+            ];
+            
+            let delay = 500;
+            msgs.forEach((msg, index) => {
                 setTimeout(() => {
-                    // Hide Security Check
-                    document.getElementById('pearl-overlay').style.display = 'none';
-                    
-                    // Show Main Site
-                    document.getElementById('main-site').style.display = 'block';
-                    
-                    // Init Animations
-                    AOS.init({ duration: 800 });
+                    bootText.innerHTML += (index > 0 ? "<br><br>" : "") + msg;
+                }, delay);
+                delay += 2500;
+            });
+            
+            setTimeout(() => {
+                const now = new Date().getTime();
+                
+                // --- FOR TESTING: Overwrite target time to 3 seconds from now ---
+                nextBirthday = now + 4000; 
 
-                    // *** NEW: Start the Music Sensor Now ***
-                    // We do this here because the user has now clicked "Login", 
-                    // so the browser allows audio to play.
-                    if (cakeSection) {
-                        musicObserver.observe(cakeSection);
-                    }
+                // Check if it's April 15, 2026 UAE time yet
+                if (now < nextBirthday) {
+                    document.getElementById('boot-screen').style.display = 'none';
+                    document.getElementById('pearl-overlay').style.display = 'flex';
+                    startPearlCountdown();
+                } else {
+                    startMainSite();
+                }
+            }, delay + 500);
+        }
 
-                }, 3000);
-            } else { 
-                document.getElementById('login-error').style.display = 'block'; 
+        function startPearlCountdown() {
+            const cdEl = document.getElementById('pearl-countdown');
+            const interval = setInterval(() => {
+                const now = new Date().getTime();
+                const dist = nextBirthday - now;
+                
+                if (dist <= 0) {
+                    clearInterval(interval);
+                    startMainSite();
+                } else {
+                    const days = Math.floor(dist / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((dist % (1000 * 60)) / 1000);
+                    cdEl.innerText = `${days > 0 ? days + 'd ' : ''}${hours}h ${minutes}m ${seconds}s`;
+                }
+            }, 1000);
+        }
+
+        function startMainSite() {
+            document.getElementById('boot-screen').style.display = 'none';
+            document.getElementById('pearl-overlay').style.display = 'none';
+            document.getElementById('main-site').style.display = 'block';
+            AOS.init({ duration: 800 });
+
+            // Start the Music Sensor Now
+            const cakeSection = document.querySelector('.bg-cake');
+            if (cakeSection) {
+                musicObserver.observe(cakeSection);
             }
         }
 
@@ -1535,8 +1702,8 @@
 
         // --- CONFIG DATE ---
         // CHANGE THIS TO YOUR START DATE (YYYY-MM-DD)
-        const startDate = new Date("2025-04-12"); // Updated date per request
-        const nextBirthday = new Date("April 15, 2026 00:00:00").getTime();
+        const startDate = new Date("April 12, 2025 00:00:00 GMT+0400"); // Synced to UAE Time
+        let nextBirthday = new Date("April 15, 2026 00:00:00 GMT+0400").getTime(); // Synced to UAE Time
 
     const reasons = [
     // Your Top 10 Picks
@@ -1734,25 +1901,6 @@
             }
         });
 
-        function toggleMusic() {
-            const audio = document.getElementById('bg-music');
-            const btn = document.getElementById('play-btn');
-            const bar = document.getElementById('music-bar');
-            
-            if (audio.paused) { 
-                audio.play(); 
-                btn.innerText = "⏸"; 
-                bar.classList.remove('retracted'); // Ensure it stays open when playing
-            } else { 
-                audio.pause(); 
-                btn.innerText = "▶"; 
-            }
-        }
-        function changeVolume(val) {
-            const audio = document.getElementById('bg-music');
-            audio.volume = val / 100; 
-        }
-
         // SPOTIFY LIVE TIMERS (UPDATED)
         setInterval(() => {
             const now = new Date().getTime();
@@ -1779,19 +1927,6 @@
                 document.getElementById("next-countdown-timer").innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
             }
         }, 1000);
-
-        // LOGIN
-        function attemptLogin() {
-            if(document.getElementById('passcode').value === '15042005') {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('pearl-overlay').style.display = 'flex';
-                setTimeout(() => {
-                    document.getElementById('pearl-overlay').style.display = 'none';
-                    document.getElementById('main-site').style.display = 'block';
-                    AOS.init({ duration: 800 });
-                }, 3000);
-            } else { document.getElementById('login-error').style.display = 'block'; }
-        }
 
         // --- NEW: MICROPHONE BLOW DETECTION ---
         function startMicrophone() {
@@ -1882,6 +2017,54 @@
         }
     }
 
+        // WEATHER DYNAMIC GENERATION
+        let currentHourForWeather = -1;
+
+        function updateWeather(hour) {
+            const container = document.getElementById('weather-container');
+            if(!container) return;
+            
+            let isDay = (hour >= 6 && hour < 18);
+            // Creates a random 20% chance of rain based on the current day and hour
+            let isRainy = (new Date().getDate() + hour) % 5 === 0; 
+            
+            let newWeather = isDay ? (isRainy ? "rain" : "clouds") : (isRainy ? "rain_night" : "stars");
+            
+            container.innerHTML = ""; 
+            
+            if (newWeather === "stars" || newWeather === "rain_night") {
+                for(let i=0; i<70; i++) {
+                    let star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    container.appendChild(star);
+                }
+            }
+            if (newWeather === "clouds") {
+                for(let i=0; i<8; i++) {
+                    let cloud = document.createElement('div');
+                    cloud.className = 'cloud';
+                    cloud.style.left = Math.random() * 100 + '%';
+                    cloud.style.top = Math.random() * 40 + '%';
+                    cloud.style.animationDuration = (Math.random() * 40 + 20) + 's';
+                    cloud.style.opacity = Math.random() * 0.4 + 0.1;
+                    cloud.style.transform = `scale(${Math.random() * 0.8 + 0.4})`;
+                    container.appendChild(cloud);
+                }
+            }
+            if (newWeather.includes("rain")) {
+                for(let i=0; i<100; i++) {
+                    let drop = document.createElement('div');
+                    drop.className = 'drop';
+                    drop.style.left = Math.random() * 100 + '%';
+                    drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+                    drop.style.animationDelay = (Math.random() * 2) + 's';
+                    container.appendChild(drop);
+                }
+            }
+        }
 
         // TIME
         function startTime() {
@@ -1893,21 +2076,27 @@
         document.getElementById('time-my').innerText = myTimeStr;
         document.getElementById('time-uae').innerText = uaeTimeStr;
 
-        const myHour = parseInt(myTimeStr.split(':')[0]);
+        const uaeHour = parseInt(uaeTimeStr.split(':')[0]); // Follows UAE timezone
         const bg = document.querySelector('.bg-distance-color');
         
         // Background changes, but TEXT COLOR lines are removed so it stays white/gray from CSS
-        if (myHour >= 6 && myHour < 11) { 
+        if (uaeHour >= 6 && uaeHour < 11) { 
             bg.style.background = "linear-gradient(135deg, #fce38a, #f38181)"; 
         } 
-        else if (myHour >= 11 && myHour < 17) { 
+        else if (uaeHour >= 11 && uaeHour < 17) { 
             bg.style.background = "linear-gradient(135deg, #2980B9, #6DD5FA, #FFFFFF)"; 
         } 
-        else if (myHour >= 17 && myHour < 19) { 
+        else if (uaeHour >= 17 && uaeHour < 19) { 
             bg.style.background = "linear-gradient(135deg, #cc2b5e, #753a88)"; 
         } 
         else { 
             bg.style.background = "linear-gradient(135deg, #0f0c29, #302b63, #24243e)"; 
+        }
+
+        // Dynamic Weather check (Updates once per hour)
+        if (uaeHour !== currentHourForWeather) {
+            currentHourForWeather = uaeHour;
+            updateWeather(uaeHour);
         }
     };
     setInterval(updateTime, 1000); 
@@ -1947,6 +2136,18 @@
         }
 
         // UTILS
+        function toggleQuestLog() {
+            const timeline = document.getElementById('quest-timeline');
+            const icon = document.getElementById('quest-toggle-icon');
+            if (timeline.style.display === 'none') {
+                timeline.style.display = 'block';
+                icon.innerText = "▲ HIDE TIMELINE";
+            } else {
+                timeline.style.display = 'none';
+                icon.innerText = "▼ VIEW TIMELINE";
+            }
+        }
+
         function toggleNightMode() { document.body.classList.toggle('night-mode-active'); progress.night = true; checkARG(); }
         
         function checkPlushies() {
