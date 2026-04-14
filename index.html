@@ -14,6 +14,7 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧸</text></svg>">    
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
@@ -1027,6 +1028,15 @@
         }
         @keyframes fall { to { transform: translateY(100vh); } }
 
+        /* --- BOOT SCREEN CURSOR --- */
+        #typing-cursor {
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
     </style>
 </head>
 <body onload="startTime()">
@@ -1407,7 +1417,7 @@
             <p>You found the hidden part!</p>
             <p style="font-size: 0.9rem; opacity: 0.8;">Here is your special Wrapped Video:</p>
             <div style="width: 95%; max-width: 450px; height: 280px; background: black; border-radius: 12px; margin: 30px auto; overflow: hidden; display: flex; justify-content: center; align-items: center; border: 2px solid #333;">
-                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/YOUR_VIDEO_ID" frameborder="0" allowfullscreen style="border-radius: 12px;"></iframe>
+                <iframe id="yt-player" width="100%" height="100%" src="https://www.youtube.com/embed/IBRWrPz9AHs?enablejsapi=1" frameborder="0" allowfullscreen style="border-radius: 12px;"></iframe>
             </div>
             
             <h3 style="margin-top: 20px; color: #ff4757; z-index: 10;">A Letter for You 💌</h3>
@@ -1540,36 +1550,69 @@ Happy Birthday, Alya.
         function initBoot() {
             document.getElementById('start-boot-btn').style.display = 'none';
             const bootText = document.getElementById('boot-text');
+            bootText.innerHTML = '<span id="typed-content"></span><span id="typing-cursor">█</span>';
+            const typedContent = document.getElementById('typed-content');
             
             const msgs = [
-                "hey alya. . .",
-                "it looks like today is your big day. . .",
-                "checking the time. . ."
+                "hey alya",
+                "it looks like today is your big day",
+                "checking the time"
             ];
             
-            let delay = 500;
-            msgs.forEach((msg, index) => {
-                setTimeout(() => {
-                    bootText.innerHTML += (index > 0 ? "<br><br>" : "") + msg;
-                }, delay);
-                delay += 2500;
-            });
-            
-            setTimeout(() => {
-                const now = new Date().getTime();
-                
-                // --- FOR TESTING: Overwrite target time to 3 seconds from now ---
-                nextBirthday = now + 4000; 
+            let msgIdx = 0;
 
-                // Check if it's April 15, 2026 UAE time yet
-                if (now < nextBirthday) {
-                    document.getElementById('boot-screen').style.display = 'none';
-                    document.getElementById('pearl-overlay').style.display = 'flex';
-                    startPearlCountdown();
-                } else {
-                    startMainSite();
+            function typeLine() {
+                if (msgIdx >= msgs.length) {
+                    setTimeout(() => {
+                        const now = new Date().getTime();
+                        
+                        // --- FOR TESTING: Overwrite target time to 3 seconds from now ---
+                        nextBirthday = now + 4000; 
+        
+                        // Check if it's April 15, 2026 UAE time yet
+                        if (now < nextBirthday) {
+                            document.getElementById('boot-screen').style.display = 'none';
+                            document.getElementById('pearl-overlay').style.display = 'flex';
+                            startPearlCountdown();
+                        } else {
+                            startMainSite();
+                        }
+                    }, 1000);
+                    return;
                 }
-            }, delay + 500);
+
+                if (msgIdx > 0) typedContent.innerHTML += "<br><br>";
+                
+                const msg = msgs[msgIdx];
+                let charIdx = 0;
+                
+                function typeChar() {
+                    if (charIdx < msg.length) {
+                        typedContent.innerHTML += msg.charAt(charIdx);
+                        charIdx++;
+                        // Random typing delay between 50ms and 150ms to look realistic
+                        setTimeout(typeChar, Math.random() * 100 + 50); 
+                    } else {
+                        // Animate the dots appearing
+                        let dots = 0;
+                        function typeDot() {
+                            if (dots < 3) {
+                                typedContent.innerHTML += " .";
+                                dots++;
+                                setTimeout(typeDot, 400); // 400ms per dot
+                            } else {
+                                msgIdx++;
+                                setTimeout(typeLine, 800); // Pause before next line starts
+                            }
+                        }
+                        setTimeout(typeDot, 400);
+                    }
+                }
+                typeChar();
+            }
+            
+            // Start typing
+            setTimeout(typeLine, 500);
         }
 
         function startPearlCountdown() {
