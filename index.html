@@ -687,8 +687,7 @@
         }
 
         #lightbox-img {
-            max-width: 90%;
-            max-height: 90%;
+            /* This will be replaced by dynamic content */
             border-radius: 10px;
             border: 3px solid white;
             box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
@@ -698,6 +697,19 @@
         @keyframes zoomIn {
             from { transform: scale(0.8); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
+        }
+        
+        /* New styles for dynamic lightbox content */
+        #lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+            border: 3px solid white;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; /* To center the media inside */
+            justify-content: center;
+            align-items: center;
         }
 
         /* UTILS */
@@ -1055,7 +1067,7 @@
     </div> 
     
     <div id="pearl-overlay"style="display: none;">
-        <img src="https://placekitten.com/300/300" class="pearl-img" alt="Pearl"> 
+        <img src="pearl.jpg" class="pearl-img" alt="Pearl"> 
         <h2 id="pearl-status" style="margin-top: 20px; color: #1DB954; text-align: center;">Pearl is preparing surprises...</h2>
         <p id="pearl-desc" style="color: #bbb; text-align: center; max-width: 80%;">She's making sure everything is perfect for your big day.</p>
         <div id="pearl-countdown" style="font-size: 2.5rem; font-family: 'Courier Prime', monospace; color: #ff4757; margin-top: 20px; font-weight: bold;">Loading...</div>
@@ -1109,7 +1121,7 @@
         <div style="display: flex; flex-direction: column; align-items: center;">
             <h3 style="margin-bottom: 10px;">Rub to reveal... 🌫️</h3>
             <div id="scratch-container">
-                <img src="https://placehold.co/300x300/png?text=Hidden+Photo" id="hidden-photo" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0;"> 
+                <img src="fog.png" id="hidden-photo" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0;"> 
                 <canvas id="fog-canvas" width="300" height="300" style="position: absolute; top:0; left:0;"></canvas>
             </div>
             <button class="btn-spotify" style="margin-top: 20px;" onclick="closeFog()">CLOSE</button>
@@ -1127,7 +1139,7 @@
 
     <!-- LIGHTBOX OVERLAY -->
     <div id="lightbox" onclick="closeLightbox()">
-        <img id="lightbox-img" src="" alt="Expanded Image">
+        <div id="lightbox-content"></div>
     </div>
 
     <div id="music-container">
@@ -1370,7 +1382,7 @@
                 </div>
                 <div class="cat-card" onclick="openCategory('trips')">
                     <img id="cat-img-trips" src="" class="cat-bg">
-                    <div class="cat-label">Trips ✈️</div>
+                    <div class="cat-label">Randoms 💥</div>
                 </div>
                 <div class="cat-card" onclick="openCategory('dates')">
                     <img id="cat-img-dates" src="" class="cat-bg">
@@ -1464,10 +1476,10 @@ Happy Birthday, Alya.
         function playCakeMusic() {
         const bgMusic = document.getElementById('bg-music');
         const cakeMusic = document.getElementById('cake-music');
-        
+
         // 1. Pause the main background music
         if(bgMusic && !bgMusic.paused) {
-            bgMusic.pause();
+            bgMusic.pause(); // Pause bgMusic if it's playing
             document.getElementById('play-btn').innerText = "▶"; // Reset main play button UI
         }
 
@@ -1612,13 +1624,13 @@ Happy Birthday, Alya.
                             if (dots < 3) {
                                 typedContent.innerHTML += " .";
                                 dots++;
-                                setTimeout(typeDot, 400); // 400ms per dot
+                                setTimeout(typeDot, 150); // 150ms per dot
                             } else {
                                 msgIdx++;
-                                setTimeout(typeLine, 800); // Pause before next line starts
+                                setTimeout(typeLine, 300); // Pause before next line starts
                             }
                         }
-                        setTimeout(typeDot, 400);
+                        setTimeout(typeDot, 150); // Start first dot faster
                     }
                 }
                 typeChar();
@@ -1653,27 +1665,49 @@ Happy Birthday, Alya.
             document.getElementById('main-site').style.display = 'block';
             AOS.init({ duration: 800 });
 
-            // Start the Music Sensor Now
+            loadProgress(); // Load progress FIRST to get currentTrackIdx and volume
+            // Initialize music player UI based on loaded progress (but don't play yet)
+            loadSong(currentTrackIdx);
+            playBtn.innerText = "▶"; // Ensure play button is shown initially
+            audio.pause(); // Ensure bgMusic is paused initially
+
+            // NEW: Observer for the distance section to start bg-music
+            const distanceSection = document.getElementById('distance-section');
+            if (distanceSection) {
+                const distanceObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const userExplicitlyPaused = localStorage.getItem('userExplicitlyPausedBgMusic') === 'true';
+                            if (bgMusic.paused && !userExplicitlyPaused) {
+                                bgMusic.play().catch(e => console.log("Bg music auto-play error:", e));
+                                playBtn.innerText = "⏸";
+                            }
+                        }
+                    });
+                }, { threshold: 0.5 }); // Trigger when 50% of the section is visible
+                distanceObserver.observe(distanceSection);
+            }
+
+            // Start the Cake Music Observer
             const cakeSection = document.querySelector('.bg-cake');
             if (cakeSection) {
                 musicObserver.observe(cakeSection);
             }
-            loadProgress(); // Load progress when the main site starts
         }
 
         /* --- UPDATED MUSIC LOGIC --- */
         const playlist = [
             {
-                title: "Tower of Memories", 
-                artist: "IVRY",
-                src: "music.mp3", 
-                art: "https://i1.sndcdn.com/artworks-e0XT6VmlnFJ1-0-t1080x1080.png"
+                title: "Lovers Rock",
+                artist: "TV Girl",
+                src: "TV Girl - Lovers Rock.mp3",
+                art: "https://i1.sndcdn.com/avatars-000407847594-bqtbez-t1080x1080.jpg"
             },
             {
-                title: "A Very Long Song Title To Test The Scrolling Feature",
-                artist: "Test Artist",
-                src: "song2.mp3",
-                art: "https://placehold.co/100x100/1DB954/white?text=Music"
+                title: "Tower of Memories",
+                artist: "IVRY",
+                src: "music.mp3",
+                art: "https://i1.sndcdn.com/artworks-e0XT6VmlnFJ1-0-t1080x1080.png"
             }
         ];
 
@@ -1687,10 +1721,10 @@ Happy Birthday, Alya.
         const scrollWrapper = document.getElementById('scrolling-wrapper');
 
         // Initialize
-        loadSong(currentTrackIdx);
+        // Initial load is now handled in startMainSite()
 
         function loadSong(index) {
-            const track = playlist[index];
+            const track = playlist[index]; // This 'audio' refers to bg-music
             audio.src = track.src;
             titleEl.innerText = track.title;
             artistEl.innerText = track.artist;
@@ -1698,12 +1732,8 @@ Happy Birthday, Alya.
             miniArtEl.src = track.art;
             
             checkScroll();
-
-            if(index !== 0 || !audio.paused) {
-                audio.play();
-                playBtn.innerText = "⏸";
-                document.getElementById('music-bar').classList.remove('retracted');
-            }
+            // Do NOT call audio.play() here. Playback is managed by toggleMusic() or observers.
+            // The UI state (play/pause button) will be updated by toggleMusic() or loadProgress().
         }
 
         function checkScroll() {
@@ -1725,9 +1755,11 @@ Happy Birthday, Alya.
                 audio.play();
                 playBtn.innerText = "⏸";
                 document.getElementById('music-bar').classList.remove('retracted');
+                localStorage.setItem('userExplicitlyPausedBgMusic', 'false'); // User explicitly played
             } else {
                 audio.pause();
                 playBtn.innerText = "▶";
+                localStorage.setItem('userExplicitlyPausedBgMusic', 'true'); // User explicitly paused
             }
         }
 
@@ -1756,6 +1788,7 @@ Happy Birthday, Alya.
             audio.volume = val / 100;
             document.getElementById('vol-text').innerText = val;
             saveProgress(); // Save state when volume changes
+            localStorage.setItem('userExplicitlyPausedBgMusic', 'false'); // Adjusting volume implies user interaction, so not explicitly paused
         }
 
         // Close volume popup if clicking elsewhere
@@ -2180,8 +2213,9 @@ Happy Birthday, Alya.
         }
         function closeFog() { document.getElementById('fog-modal').style.display = 'none'; }
         function initCanvas() {
-            const canvas = document.getElementById('fog-canvas'); const ctx = canvas.getContext('2d');
-            const container = document.getElementById('scratch-container');
+            const canvas = document.getElementById('fog-canvas');
+            const ctx = canvas.getContext('2d');
+            const container = document.getElementById('hidden-photo'); // Correctly reference the image element
             canvas.style.opacity = 1; container.classList.remove('fog-glow'); scratchedPixels = 0;
             ctx.globalCompositeOperation = 'source-over';
             ctx.fillStyle = "rgba(200, 200, 200, 0.9)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -2422,79 +2456,134 @@ Happy Birthday, Alya.
         // Replace these placeholder links with your actual images!
         const galleryData = {
             us: [
-                "https://placehold.co/400x600/pink/white?text=Us+1",
-                "https://placehold.co/500x500/pink/white?text=Us+2",
-                "https://placehold.co/600x400/pink/white?text=Us+3",
-                "https://placehold.co/400x500/pink/white?text=Us+4",
-                "https://placehold.co/500x400/pink/white?text=Us+5",
-                "https://placehold.co/400x600/pink/white?text=Us+6",
-                "https://placehold.co/600x600/pink/white?text=Us+7",
-                "https://placehold.co/500x500/pink/white?text=Us+8"
+                "vid1.mp4", // Example video file
+                "vid2-us.mp4",
+                "us-1.jpg",
+                "us-2.jpg",
+                "us-3.jpg",
+                "us-4.jpg",
+                "us-5.jpg",
+                "us-6.jpg"
             ],
             trips: [
-                "https://placehold.co/400x400/pink/white?text=Trip+1",
-                "https://placehold.co/600x800/pink/white?text=Trip+2",
-                "https://placehold.co/500x300/pink/white?text=Trip+3",
-                "https://placehold.co/400x500/pink/white?text=Trip+4",
-                "https://placehold.co/500x600/pink/white?text=Trip+5",
-                "https://placehold.co/600x400/pink/white?text=Trip+6",
-                "https://placehold.co/400x400/pink/white?text=Trip+7",
-                "https://placehold.co/500x500/pink/white?text=Trip+8"
+                "r-1.jpg",
+                "r-2.jpg",
+                "r-3.mp4",
+                "r-4.jpg",
+                "r-5.jpg",
+                "r-6.jpg",
+                "r-7.jpg",
+                "r-8.jpg"
             ],
             dates: [
-                "https://placehold.co/600x400/pink/white?text=Date+1",
-                "https://placehold.co/400x600/pink/white?text=Date+2",
-                "https://placehold.co/500x500/pink/white?text=Date+3",
-                "https://placehold.co/400x400/pink/white?text=Date+4",
-                "https://placehold.co/600x500/pink/white?text=Date+5",
-                "https://placehold.co/500x600/pink/white?text=Date+6",
-                "https://placehold.co/400x500/pink/white?text=Date+7",
-                "https://placehold.co/600x600/pink/white?text=Date+8"
+                "d-1.jpg",
+                "d-2.jpg",
+                "d-3.jpg",
+                "d-4.jpg",
+                "d-5.jpg",
+                "d-6.jpg",
+                "d-7.jpg",
+                "d-8.jpg"
             ],
             silly: [
-                "https://placehold.co/400x400/pink/white?text=Silly+1",
-                "https://placehold.co/300x500/pink/white?text=Silly+2",
-                "https://placehold.co/500x500/pink/white?text=Silly+3",
-                "https://placehold.co/400x400/pink/white?text=Silly+4",
-                "https://placehold.co/600x400/pink/white?text=Silly+5",
-                "https://placehold.co/500x600/pink/white?text=Silly+6",
-                "https://placehold.co/400x500/pink/white?text=Silly+7",
-                "https://placehold.co/600x600/pink/white?text=Silly+8"
+                "s-1.jpg",
+                "s-2.jpg",
+                "s-3.jpg",
+                "s-4.jpg",
+                "s-5.mp4",
+                "s-6.jpg",
+                "s-7.jpg",
+                "s-8.jpg"
             ]
         };
 
         const categoryTitles = { us: "Just Us ❤️", trips: "Our Adventures ✈️", dates: "Cute Dates 🍽️", silly: "Silly Moments 🤪" };
 
+        // Helper function to get the appropriate thumbnail source for a category
+        function getThumbnailSrc(mediaArray) {
+            for (const item of mediaArray) {
+                // Check if the item is an image
+                if (item.endsWith('.jpg') || item.endsWith('.jpeg') || item.endsWith('.png') || item.endsWith('.gif')) {
+                    return item;
+                }
+            }
+            // If no image is found, and there's at least one video, return a generic video placeholder
+            if (mediaArray.length > 0 && (mediaArray[0].endsWith('.mp4') || mediaArray[0].endsWith('.webm') || mediaArray[0].endsWith('.ogg'))) {
+                return "https://placehold.co/600x400/000/white?text=Video"; // Generic video placeholder
+            }
+            return "https://placehold.co/600x400/ccc/white?text=No+Preview"; // Default if array is empty or no suitable media
+        }
+
         // Automatically set the category thumbnail to the FIRST image of each array!
-        document.getElementById('cat-img-us').src = galleryData.us[0];
-        document.getElementById('cat-img-trips').src = galleryData.trips[0];
-        document.getElementById('cat-img-dates').src = galleryData.dates[0];
-        document.getElementById('cat-img-silly').src = galleryData.silly[0];
+        document.getElementById('cat-img-us').src = getThumbnailSrc(galleryData.us);
+        document.getElementById('cat-img-trips').src = getThumbnailSrc(galleryData.trips);
+        document.getElementById('cat-img-dates').src = getThumbnailSrc(galleryData.dates);
+        document.getElementById('cat-img-silly').src = getThumbnailSrc(galleryData.silly);
 
         function openCategory(cat) {
             const grid = document.getElementById('masonry-grid');
             grid.innerHTML = ''; // Clear old images
             document.getElementById('gallery-title').innerText = categoryTitles[cat];
             
+            // Update achievement progress
             categoriesOpened.add(cat);
             if(categoriesOpened.size === Object.keys(galleryData).length) unlockAch('memories'); // Check against total categories
             saveProgress(); // Save state after opening category
 
             galleryData[cat].forEach(src => {
-                const img = document.createElement('img');
-                img.src = src;
-                img.className = 'gallery-pic';
-                img.onclick = () => openLightbox(src); // Clicking image opens lightbox
-                grid.appendChild(img);
+                let mediaElement;
+                if (src.endsWith('.mp4') || src.endsWith('.webm') || src.endsWith('.ogg')) {
+                    mediaElement = document.createElement('video');
+                    mediaElement.src = src;
+                    mediaElement.autoplay = false; // Don't autoplay in the grid
+                    mediaElement.loop = true;
+                    mediaElement.muted = true; // Muted for autoplay in some browsers
+                    mediaElement.controls = false; // No controls in the grid view
+                    mediaElement.setAttribute('playsinline', ''); // For iOS autoplay
+                } else {
+                    mediaElement = document.createElement('img');
+                    mediaElement.src = src;
+                }
+                mediaElement.className = 'gallery-pic';
+                mediaElement.onclick = () => openLightbox(src); // Clicking media opens lightbox
+                grid.appendChild(mediaElement);
             });
             
             document.getElementById('gallery-tab').style.display = 'block';
             document.body.style.overflow = 'hidden'; // Stop background scrolling
         }
 
-        function closeCategory() { document.getElementById('gallery-tab').style.display = 'none'; document.body.style.overflow = 'auto'; }
-        function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').style.display = 'flex'; }
-        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
+        function closeCategory() { 
+            document.getElementById('gallery-tab').style.display = 'none'; 
+            document.body.style.overflow = 'auto'; 
+        }
+        function openLightbox(src) { 
+            const lightboxContent = document.getElementById('lightbox-content');
+            lightboxContent.innerHTML = ''; // Clear previous content
+            let mediaElement;
+            if (src.endsWith('.mp4') || src.endsWith('.webm') || src.endsWith('.ogg')) {
+                mediaElement = document.createElement('video');
+                mediaElement.src = src;
+                mediaElement.controls = true;
+                mediaElement.autoplay = true;
+                mediaElement.loop = true;
+                mediaElement.setAttribute('playsinline', '');
+            } else {
+                mediaElement = document.createElement('img');
+                mediaElement.src = src;
+            }
+            lightboxContent.appendChild(mediaElement);
+            document.getElementById('lightbox').style.display = 'flex'; 
+        }
+        function closeLightbox() { 
+            const lightbox = document.getElementById('lightbox');
+            const videoElement = lightbox.querySelector('video');
+            if (videoElement) {
+                videoElement.pause(); // Pause video when closing lightbox
+                videoElement.currentTime = 0; // Reset video to start
+            }
+            lightbox.style.display = 'none'; 
+        }
 
         // --- LOCAL STORAGE FUNCTIONS ---
         function saveProgress() {
@@ -2505,7 +2594,7 @@ Happy Birthday, Alya.
                 plushiesFound: plushiesFound,
                 categoriesOpened: Array.from(categoriesOpened), // Convert Set to Array for JSON
                 currentTrackIdx: currentTrackIdx,
-                musicVolume: audio.volume,
+                musicVolume: audio.volume, // Save current volume
                 nightModeActive: document.body.classList.contains('night-mode-active')
             };
             localStorage.setItem('alyaProgress', JSON.stringify(progressData));
@@ -2537,8 +2626,10 @@ Happy Birthday, Alya.
 
                 // Restore music player state
                 currentTrackIdx = progressData.currentTrackIdx !== undefined ? progressData.currentTrackIdx : 0;
-                loadSong(currentTrackIdx); // Load the correct song
-                if (progressData.musicVolume !== undefined) {
+                // loadSong(currentTrackIdx); // Removed: loadSong is called after loadProgress in startMainSite
+                
+                if (progressData.musicVolume !== undefined) { // Restore volume
+                    // Set initial volume for bgMusic if not already set by user interaction
                     audio.volume = progressData.musicVolume;
                     document.querySelector('.vol-slider').value = Math.round(progressData.musicVolume * 100);
                     document.getElementById('vol-text').innerText = Math.round(progressData.musicVolume * 100);
@@ -2549,6 +2640,18 @@ Happy Birthday, Alya.
                     document.body.classList.add('night-mode-active');
                 } else {
                     document.body.classList.remove('night-mode-active');
+                }
+
+                // Ensure the correct song is loaded based on restored currentTrackIdx
+                loadSong(currentTrackIdx);
+
+                
+                // Restore play/pause button state based on user's last action
+                if (localStorage.getItem('userExplicitlyPausedBgMusic') === 'true') {
+                    playBtn.innerText = "▶"; // Show play button if user paused
+                    audio.pause(); // Ensure audio is paused
+                } else {
+                    playBtn.innerText = "⏸"; // Show pause button if user didn't explicitly pause
                 }
 
                 console.log("Progress loaded!");
