@@ -700,7 +700,7 @@
         }
         
         /* New styles for dynamic lightbox content */
-        #lightbox-content {
+        #lightbox-content { /* Added onclick to prevent closing when clicking on the media itself */
             max-width: 90%;
             max-height: 90%;
             border-radius: 10px;
@@ -710,6 +710,8 @@
             display: flex; /* To center the media inside */
             justify-content: center;
             align-items: center;
+            /* Ensure media fits entirely within the lightbox without cropping */
+            object-fit: contain; 
         }
 
         /* UTILS */
@@ -2568,9 +2570,15 @@ Happy Birthday, Alya.
                 mediaElement.autoplay = true;
                 mediaElement.loop = true;
                 mediaElement.setAttribute('playsinline', '');
+                mediaElement.style.objectFit = 'contain'; // Ensure video fits
+                mediaElement.style.width = '100%'; // Fill parent
+                mediaElement.style.height = '100%'; // Fill parent
             } else {
                 mediaElement = document.createElement('img');
                 mediaElement.src = src;
+                mediaElement.style.objectFit = 'contain'; // Ensure image fits
+                mediaElement.style.width = '100%'; // Fill parent
+                mediaElement.style.height = '100%'; // Fill parent
             }
             lightboxContent.appendChild(mediaElement);
             document.getElementById('lightbox').style.display = 'flex'; 
