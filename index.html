@@ -984,6 +984,14 @@
             transition: transform 0.5s 0.5s, height 0.5s 0.5s;
         }
 
+        /* Mobile adjustments for envelope to ensure it scales down proportionally */
+        @media (max-width: 768px) {
+            .envelope-container {
+                transform: scale(0.8); /* Scales the entire envelope to 80% of its original size */
+                margin: 40px auto; /* Re-centers the scaled envelope */
+            }
+        }
+
         /* --- LETTER SCROLLBAR --- */
         .envelope-letter p {
             flex: 1;
@@ -1397,6 +1405,7 @@
             </div>
             <p id="voice-text" style="margin-top: 20px; font-size: 0.9rem; opacity: 0;">Playing...</p>
             <audio id="voice-msg"><source src="voice.mp3" type="audio/mpeg"></audio>
+            <audio id="voice-msg"><source src="my_message.mp3" type="audio/mpeg"></audio>
         </section>
 
         <section id="finale-section" style="background: black;" data-track="0">
@@ -1507,6 +1516,7 @@ Happy Birthday, Alya.
             // 1. Select the elements
             const cakeSection = document.querySelector('.bg-cake');
             const bgMusic = document.getElementById('bg-music');
+            bgMusic.volume = 0.02; // Set initial volume for bgMusic
             const cakeMusic = document.getElementById('cake-music');
 
             // 2. Define the "DJ" Sensor
@@ -1525,6 +1535,7 @@ Happy Birthday, Alya.
                         // 2. Play Birthday Track
                         cakeMusic.volume = 0.3; // Set volume
                         cakeMusic.play().catch(e => console.log("Audio waiting for interaction"));
+                        saveProgress(); // Save state when music changes
                     } 
                     
                     // CASE B: User scrolls AWAY from Cake Section
@@ -1534,6 +1545,7 @@ Happy Birthday, Alya.
                         if (!cakeMusic.paused) {
                             cakeMusic.pause();
                             cakeMusic.currentTime = 0; // Reset to start
+                            saveProgress(); // Save state when music changes
                         }
 
                         // 2. Resume Main Playlist (if it was loaded)
@@ -1577,6 +1589,7 @@ Happy Birthday, Alya.
                         } else {
                             startMainSite();
                         }
+                        saveProgress(); // Save state after boot sequence
                     }, 1000);
                     return;
                 }
@@ -1645,6 +1658,7 @@ Happy Birthday, Alya.
             if (cakeSection) {
                 musicObserver.observe(cakeSection);
             }
+            loadProgress(); // Load progress when the main site starts
         }
 
         /* --- UPDATED MUSIC LOGIC --- */
@@ -1671,9 +1685,6 @@ Happy Birthday, Alya.
         const artEl = document.getElementById('track-art');
         const miniArtEl = document.getElementById('mini-art');
         const scrollWrapper = document.getElementById('scrolling-wrapper');
-
-        // 1. Set Initial Volume to 10%
-        audio.volume = 0.02; 
 
         // Initialize
         loadSong(currentTrackIdx);
@@ -1744,6 +1755,7 @@ Happy Birthday, Alya.
         function changeVolume(val) {
             audio.volume = val / 100;
             document.getElementById('vol-text').innerText = val;
+            saveProgress(); // Save state when volume changes
         }
 
         // Close volume popup if clicking elsewhere
@@ -2035,6 +2047,7 @@ Happy Birthday, Alya.
                         btn.innerText = "WISH GRANTED! 🎂";
                         btn.disabled = true;
                         btn.style.backgroundColor = "#555";
+                        saveProgress(); // Save state after blowing candles
 
                         // Make ALYA text glow!
                         document.getElementById('alya-text').classList.add('glow-text');
@@ -2062,6 +2075,7 @@ Happy Birthday, Alya.
                         stream.getTracks().forEach(track => track.stop());
                         scriptProcessor.disconnect();
                         audioContext.close();
+                        saveProgress(); // Save state after microphone interaction
                     }
                 };
             }).catch(function(err) {
@@ -2204,7 +2218,7 @@ Happy Birthday, Alya.
             }
         }
 
-        function toggleNightMode() { document.body.classList.toggle('night-mode-active'); progress.night = true; checkARG(); }
+        function toggleNightMode() { document.body.classList.toggle('night-mode-active'); progress.night = true; checkARG(); saveProgress(); }
         
         function checkPlushies() {
             if (plushiesFound.bear && plushiesFound.sunflower) {
@@ -2266,6 +2280,7 @@ Happy Birthday, Alya.
             if(typeof progress !== 'undefined') {
                 progress.flowers++; 
                 checkARG();
+                saveProgress(); // Save state after planting flower
             }
         };
         garden.appendChild(flower);
@@ -2279,6 +2294,7 @@ Happy Birthday, Alya.
              alert("You found the secret teddy bear! 🧸");
              plushiesFound.bear = true;
              checkPlushies();
+             saveProgress(); // Save state after finding plushie
         }
         
         // ALERTS
@@ -2302,6 +2318,7 @@ Happy Birthday, Alya.
             }
             typeWriter();
             progress.reasons++; checkARG();
+            saveProgress(); // Save state after generating reason
         }
 
         // VOICE
@@ -2314,7 +2331,7 @@ Happy Birthday, Alya.
                 audio.play();
                 capsule.classList.add('voice-active');
                 txt.style.opacity = '1';
-                audio.onended = function() { capsule.classList.remove('voice-active'); txt.style.opacity = '0'; document.getElementById('bg-music').play(); };
+                audio.onended = function() { capsule.classList.remove('voice-active'); txt.style.opacity = '0'; document.getElementById('bg-music').play(); saveProgress(); };
             } else { audio.pause(); capsule.classList.remove('voice-active'); }
         }
 
@@ -2358,6 +2375,7 @@ Happy Birthday, Alya.
                 btn.style.background = "#ff4757";
                 btn.style.transform = "scale(1.1)";
                 isSigned = true;
+                saveProgress(); // Save state after signing contract
                 unlockAch('contract');
 
             } else {
@@ -2390,12 +2408,13 @@ Happy Birthday, Alya.
             if(mood === 'happy') {
                 resp.innerText = "I'm glad you're smiling today. Keep shining! ✨";
                 // Confetti from center screen (behind box)
-                confetti({ colors: ['#ff4757', '#ffffff'], origin: { x: 0.5, y: 0.5 }, zIndex: 1 }); 
+                confetti({ colors: ['#ff4757', '#ffffff'], origin: { x: 0.5, y: 0.5 }, zIndex: 15000 }); 
             } else if(mood === 'tired') {
                 resp.innerText = "Take a deep breath. You're doing amazing, Alya. ☁️";
             } else {
                 resp.innerText = "I miss you more. Not long now until MY ✈️ UAE.";
             }
+            saveProgress(); // Save state after changing mood
         } 
 
         // --- GALLERY & LIGHTBOX LOGIC ---
@@ -2458,7 +2477,8 @@ Happy Birthday, Alya.
             document.getElementById('gallery-title').innerText = categoryTitles[cat];
             
             categoriesOpened.add(cat);
-            if(categoriesOpened.size === 4) unlockAch('memories');
+            if(categoriesOpened.size === Object.keys(galleryData).length) unlockAch('memories'); // Check against total categories
+            saveProgress(); // Save state after opening category
 
             galleryData[cat].forEach(src => {
                 const img = document.createElement('img');
@@ -2475,6 +2495,71 @@ Happy Birthday, Alya.
         function closeCategory() { document.getElementById('gallery-tab').style.display = 'none'; document.body.style.overflow = 'auto'; }
         function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').style.display = 'flex'; }
         function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
+
+        // --- LOCAL STORAGE FUNCTIONS ---
+        function saveProgress() {
+            const progressData = {
+                progress: progress,
+                achievements: achievements,
+                isSigned: isSigned,
+                plushiesFound: plushiesFound,
+                categoriesOpened: Array.from(categoriesOpened), // Convert Set to Array for JSON
+                currentTrackIdx: currentTrackIdx,
+                musicVolume: audio.volume,
+                nightModeActive: document.body.classList.contains('night-mode-active')
+            };
+            localStorage.setItem('alyaProgress', JSON.stringify(progressData));
+            console.log("Progress saved!");
+        }
+
+        function loadProgress() {
+            const savedData = localStorage.getItem('alyaProgress');
+            if (savedData) {
+                const progressData = JSON.parse(savedData);
+
+                // Restore simple variables
+                progress = progressData.progress || { flowers: 0, fog: false, night: false, reasons: 0 };
+                isSigned = progressData.isSigned || false;
+                plushiesFound = progressData.plushiesFound || { bear: false, sunflower: false };
+                categoriesOpened = new Set(progressData.categoriesOpened || []);
+
+                // Restore achievements
+                if (progressData.achievements) {
+                    for (const achId in progressData.achievements) {
+                        if (achievements[achId]) { // Ensure achievement exists in current code
+                            achievements[achId].done = progressData.achievements[achId].done;
+                            if (achievements[achId].done) {
+                                document.getElementById('ach-check-' + achId).innerText = "✅";
+                            }
+                        }
+                    }
+                }
+
+                // Restore music player state
+                currentTrackIdx = progressData.currentTrackIdx !== undefined ? progressData.currentTrackIdx : 0;
+                loadSong(currentTrackIdx); // Load the correct song
+                if (progressData.musicVolume !== undefined) {
+                    audio.volume = progressData.musicVolume;
+                    document.querySelector('.vol-slider').value = Math.round(progressData.musicVolume * 100);
+                    document.getElementById('vol-text').innerText = Math.round(progressData.musicVolume * 100);
+                }
+
+                // Restore night mode
+                if (progressData.nightModeActive) {
+                    document.body.classList.add('night-mode-active');
+                } else {
+                    document.body.classList.remove('night-mode-active');
+                }
+
+                console.log("Progress loaded!");
+            }
+        }
+
+        // Call loadProgress when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProgress();
+            // Any other initializations that depend on loaded state can go here
+        });
 
         
         
