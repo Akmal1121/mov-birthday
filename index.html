@@ -2411,8 +2411,8 @@ Happy Birthday, Alya.
                 btn.style.background = "#ff4757";
                 btn.style.transform = "scale(1.1)";
                 isSigned = true;
-                saveProgress(); // Save state after signing contract
                 unlockAch('contract');
+                saveProgress(); // Save state after signing contract
 
             } else {
                 // Unlock Secret
@@ -2598,7 +2598,6 @@ Happy Birthday, Alya.
             const progressData = {
                 progress: progress,
                 achievements: achievements,
-                isSigned: isSigned,
                 plushiesFound: plushiesFound,
                 categoriesOpened: Array.from(categoriesOpened), // Convert Set to Array for JSON
                 currentTrackIdx: currentTrackIdx,
@@ -2616,7 +2615,6 @@ Happy Birthday, Alya.
 
                 // Restore simple variables
                 progress = progressData.progress || { flowers: 0, fog: false, night: false, reasons: 0 };
-                isSigned = progressData.isSigned || false;
                 plushiesFound = progressData.plushiesFound || { bear: false, sunflower: false };
                 categoriesOpened = new Set(progressData.categoriesOpened || []);
 
